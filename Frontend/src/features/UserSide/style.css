@@ -1,0 +1,157 @@
+/* General Container Styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block;
+    box-sizing: border-box;
+    font-family: "Lexend", sans-serif;
+  }
+  
+  .inner-container {
+    width: 75%;
+    margin-right: 300px;
+    padding-right: 0;
+    display: block;
+    box-sizing: border-box;
+  }
+  
+  /* Title Styles */
+  .page-title {
+    font-size: 2.1em;
+    text-align: left;
+    width: 100%;
+    margin-top: 20px;
+    margin-right: 85px;
+  }
+  
+  /* Published Info Styles */
+  .published-container {
+    border-bottom: 1px solid #00000045;
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-decoration: none;
+  }
+  
+  .published-info {
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+    display: flex;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: inherit;
+  }
+  
+  /* Image and Description Styles */
+  .hero-image {
+    object-fit: fill;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    text-align: left;
+    border-radius: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: auto;
+    max-height: none;
+    margin: 20px auto;
+  }
+  
+  .subtitle {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  /* Details Box */
+  .details-header {
+    border: 1px solid #000;
+    border-radius: 0;
+    outline: 3px #333;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 59%;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+    display: flex;
+    box-shadow: 4px 4px 20px #0003;
+  }
+  
+  .details-wrapper {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    box-sizing: border-box;
+  }
+  
+  .details-box {
+    border: 1px solid #000;
+    border-radius: 0;
+    outline: 3px #333;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 59%;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+    display: flex;
+    box-shadow: 4px 4px 20px #0003;
+  }
+  
+  .draw-title {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+    font-weight: 400;
+  }
+  
+  .draw-detail {
+    text-align: center;
+    border-radius: 0;
+    align-self: auto;
+    width: auto;
+    margin: 5px 4px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+    font-size: 1.2em;
+    font-weight: 500;
+    display: block;
+  }
+  
+  /* Description Styles */
+  .subdescription {
+    border-bottom: 1px none var(--border-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 17px;
+    color: #555;
+    box-sizing: border-box;
+  }
+  
