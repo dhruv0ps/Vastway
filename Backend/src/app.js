@@ -14,11 +14,11 @@ app.get('/api/check', (req, res) => {
   res.status(200).send('Hello World!')
 })
 app.use("/api/", routes)
-// app.use((req, res, next) => {
-//   let err = new Error("Not Found");
-//   err.status = 404
-//   next(err)
-// })
+app.use((req, res, next) => {
+  let err = new Error("Not Found");
+  err.status = 404
+  next(err)
+})
 
 init()
 server.listen(app.get('port'), () => {
