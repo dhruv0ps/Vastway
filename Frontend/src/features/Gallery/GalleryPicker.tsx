@@ -17,7 +17,7 @@ interface Props {
 const GalleryPicker: React.FC<Props> = ({ onSelect, isOpen, onClose }) => {
   const [images, setImages] = useState<Image[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
+  // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
 
   useEffect(() => {
     if (isOpen) {
@@ -55,7 +55,7 @@ const GalleryPicker: React.FC<Props> = ({ onSelect, isOpen, onClose }) => {
               onClick={() => setSelectedImage(img.url)}
             >
               <img
-                src={`${baseImageUrl}/${img.url}`}
+                src={img.url}
                 alt={img.title}
                 className="w-full h-20 object-cover rounded-md"
               />

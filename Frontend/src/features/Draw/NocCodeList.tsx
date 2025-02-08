@@ -86,7 +86,7 @@ const NocCodeList: React.FC = () => {
                   <Table.Cell>{noc?.tier}</Table.Cell>
                   <Table.Cell>{noc?.classTitle}</Table.Cell>
                   <Table.Cell>
-                    <Button  size="sm" onClick={() => navigate(`/noc-codes/edit/${noc._id}`)} className="bg-primary">
+                    <Button  size="sm" onClick={() => navigate(`/noccode/${noc._id}`)} className="bg-primary">
                     
                       Edit
                     </Button>

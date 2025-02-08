@@ -121,10 +121,10 @@ const DrawList: React.FC = () => {
                 Date {sortColumn === "drawDate" ? (sortDirection === "asc" ? <FaSortUp /> : <FaSortDown />) : <FaSort />}
               </Table.HeadCell>
               <Table.HeadCell onClick={() => handleSort("location")} className="cursor-pointer  bg-primary text-white">
-                Location {sortColumn === "location" ? (sortDirection === "asc" ? <FaSortUp /> : <FaSortDown />) : <FaSort />}
+                Tie BrekingRule 
               </Table.HeadCell>
               <Table.HeadCell onClick={() => handleSort("candidates")} className="cursor-pointer  bg-primary text-white">
-                Candidates {sortColumn === "candidates" ? (sortDirection === "asc" ? <FaSortUp /> : <FaSortDown />) : <FaSort />}
+              rankRequired
               </Table.HeadCell>
               <Table.HeadCell className=" bg-primary text-white">Actions</Table.HeadCell>
             </Table.Head>

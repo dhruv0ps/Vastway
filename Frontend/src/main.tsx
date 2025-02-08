@@ -57,6 +57,10 @@ const router = createBrowserRouter([
       },{
         path:"/noccode",
         element:<NocCodeForm/>
+      },
+      {
+        path:"/noccode/:id",
+        element:<NocCodeForm/>
       },{
         path:"/noccode/list",
         element:<NocCodeList/>

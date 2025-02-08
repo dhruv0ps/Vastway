@@ -7,7 +7,7 @@ import { Card } from "flowbite-react";
 
 export default function CanindianDraws() {
     const [draws, setDraws] = useState<any[]>([]);
-    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050"; 
+    // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050"; 
         useEffect(() => {
           const fetchDraws = async () => {
             try {
@@ -39,9 +39,9 @@ export default function CanindianDraws() {
           <Card key={item.id}  className="hover:shadow-lg transition-shadow cursor-pointer " >
              <div className="relative h-48 overflow-hidden rounded-t-lg">
               
-              {item.image ? (
+             {item.image || item.imageUrl ? (
                 <img
-                src={`${baseImageUrl}/${item.image}`} 
+                src={item.imageUrl ? item.imageUrl : item.image}
                   alt={item.title}
                   className="absolute top-0 left-0 max-w-xs max-h-48  object-cover"
                 />

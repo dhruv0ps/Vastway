@@ -3,6 +3,7 @@ const ImageService = require("../services/galleryService");
 const uploadImage = async (req, res) => {
   try {
     const imageUrl = req.file.path;
+    console
     const image = await ImageService.uploadImage(imageUrl, req.body);
     res.status(201).json({ status: true, data: image, err: {} });
   } catch (error) {

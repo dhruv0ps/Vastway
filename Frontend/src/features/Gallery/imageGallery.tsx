@@ -28,7 +28,7 @@ export const ImageGallery: React.FC = () => {
     const [selectedImages, setSelectedImages] = useState<ImageFile[]>([]);
     const [imageDetails, setImageDetails] = useState<Record<string, ImageDetails>>({});
     const [searchQuery, setSearchQuery] = useState('');
-    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
+    // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
     // Sample images for the Media Library
     //   const sampleImages = [
     //     { url: 'https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=800&q=60', id: '1' },
@@ -212,7 +212,7 @@ export const ImageGallery: React.FC = () => {
                                         )}
                                         onClick={() => handleImageSelect(img)}
                                     >
-                                        <img src={img.url.includes('uploads') ? `${baseImageUrl}/${img.url}` : img.url}
+                                        <img src={img.url}
                                             alt="Gallery preview"
                                             className="w-full aspect-square object-cover rounded-lg"
                                         />

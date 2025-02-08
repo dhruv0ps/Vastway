@@ -12,6 +12,7 @@ const ImageModel = require("../config/models/GalleryModel");
         await newImage.save();
         return newImage;
       } catch (error) {
+        console.log(error)
         throw new Error(error);
       }
     },

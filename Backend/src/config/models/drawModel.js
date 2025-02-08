@@ -8,7 +8,7 @@ const drawSchema = new mongoose.Schema(
   publishedBy: { type: String, default: "Vastway Immigration" },
   invitationsIssued: { type: Number, required: true },
   drawDate: { type: Date, required: true },
-  crsCutoff: { type: Number, default: null },
+  crsCutoff: { type: String, default: null },
   score: { type: Number, default: null },
   rankRequired: { type: String, required: true },
   tieBreakingRule: { type: String, required: true },

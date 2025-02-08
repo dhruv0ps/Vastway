@@ -24,7 +24,7 @@ const DrawForm = () => {
   const [imageSource, setImageSource] = useState<"upload" | "gallery">("upload"); 
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-  const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
+  // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null); 
   const [formData, setFormData] = useState({
@@ -76,13 +76,13 @@ const DrawForm = () => {
 
         if (draw.imageUrl) {
           setSelectedImageUrl(draw.imageUrl);
-          setPreviewImage(`${baseImageUrl}/${draw.imageUrl}`);
+          setPreviewImage(draw.imageUrl);
           setImageSource("gallery");
         }
 
         if(draw.image) {
           setSelectedImageUrl(draw.image);
-          setPreviewImage(`${baseImageUrl}/${draw.image}`);
+          setPreviewImage(draw.image);
           setImageSource("upload")
         }
       }
@@ -131,7 +131,7 @@ const DrawForm = () => {
   const handleSelectImageFromGallery = (imageUrl: string) => {
     setSelectedImageUrl(imageUrl);
     setSelectedImageFile(null); 
-    setPreviewImage(`${baseImageUrl}/${imageUrl}`); 
+    setPreviewImage(imageUrl); 
   };
   const handleSubcategorySelect = (subcategory: subCategory) => {
     if (!subcategory._id) return; // 
@@ -194,7 +194,7 @@ const DrawForm = () => {
         const res = await drawrAPi.AddDraw(formDataToSend);
         if (res.status) {
           toast.success("Draw successfully added.");
-          navigate(-1);
+          navigate("/drawlist");
         }
       }
     } catch (error) {
