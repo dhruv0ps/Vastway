@@ -1,5 +1,5 @@
-const base = "http://localhost:3000/api"
-
+// const base = "http://localhost:3000/api"
+const base = "https://vastway.vercel.app/api"
 export const apiUrl = {
     Category: `${base}/categories`,
     subcategory: `${base}/subcategories`,
