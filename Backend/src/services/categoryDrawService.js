@@ -9,7 +9,23 @@ const createCategory = async (name, singleDigitKey) => {
     throw new Error(error.message);
   }
 };
+const updateCategory = async (id, name) => {
+  try {
+    const updatedCategory = await Category.findByIdAndUpdate(
+      id,
+      { name },
+      { new: true, runValidators: true }
+    );
 
+    if (!updatedCategory) {
+      throw new Error("Category not found");
+    }
+
+    return updatedCategory;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 const getAllCategories = async () => {
   try {
     return await Category.find();
@@ -71,6 +87,23 @@ const deleteSubCategory = async (id) => {
   }
 };
 
+const updateSubCategory = async (id, name, ID, categoryId) => {
+  try {
+    const updatedSubCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      { name, ID, category: categoryId },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedSubCategory) {
+      throw new Error("SubCategory not found");
+    }
+
+    return updatedSubCategory;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 
 module.exports = {
   createCategory,
@@ -81,4 +114,5 @@ module.exports = {
   getAllSubCategories,
   getSubCategoryById,
   deleteSubCategory,
+  updateCategory,updateSubCategory
 };

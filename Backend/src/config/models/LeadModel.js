@@ -22,7 +22,7 @@ const LeadSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  documents: [{
+  images: [{
     type: String 
   }],
   notes: {
@@ -38,5 +38,7 @@ const LeadCategorySchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Lead", LeadSchema);
-module.exports = mongoose.model("LeadCategory", LeadCategorySchema);
+const Lead = mongoose.model("Lead", LeadSchema);
+const LeadCategory = mongoose.model("LeadCategory", LeadCategorySchema);
+
+module.exports = { Lead, LeadCategory };

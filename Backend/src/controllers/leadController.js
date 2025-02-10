@@ -4,7 +4,12 @@ const LeadService = require("../services/leadService");
   
   async createLead(req, res) {
     try {
-      const result = await LeadService.createLead(req.body);
+      const leadData = {
+        ...req.body,
+        images: req.files ? req.files.map((file) => file.path) : [],
+      };
+
+      const result = await LeadService.createLead(leadData);
       return res.json({ status: true, data: result, err: {} });
     } catch (error) {
       return res.status(500).json({ status: false, data: {}, err: error.message });
@@ -31,7 +36,11 @@ const LeadService = require("../services/leadService");
 
   async updateLead(req, res) {
     try {
-      const result = await LeadService.updateLead(req.params.id, req.body);
+      const leadData = {
+        ...req.body,
+        images: req.files ? req.files.map((file) => file.path) : [],
+      };
+      const result = await LeadService.updateLead(req.params.id, leadData);
       return res.json({ status: true, data: result, err: {} });
     } catch (error) {
       return res.status(500).json({ status: false, data: {}, err: error.message });

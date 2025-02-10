@@ -4,6 +4,7 @@ import NavBar from './Nav';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
+
 const Home = observer(() => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true)
   const toggleSidebar = () => {
@@ -16,6 +17,7 @@ const Home = observer(() => {
 
   return (
     <>
+    
       <div className='flex-1 relative z-10'>
         <NavBar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       </div>

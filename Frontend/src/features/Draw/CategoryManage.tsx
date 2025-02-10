@@ -246,15 +246,15 @@ const CategoryManager: React.FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <Table.Head>
-                            <Table.HeadCell>Name</Table.HeadCell>
-                            <Table.HeadCell className='justify-end flex'>Action</Table.HeadCell>
+                            <Table.HeadCell className='bg-primary text-white'>Name</Table.HeadCell>
+                            <Table.HeadCell className='justify-end flex bg-primary text-white'>Action</Table.HeadCell>
                         </Table.Head>
                         <Table.Body>
                             {categories.map((category) => (
                                 <Table.Row key={category._id}>
                                     <Table.Cell>{toTitleCase(category.name)}</Table.Cell>
                                     <Table.Cell className='flex gap-x-3 space-x-4 items-center justify-end'>
-                                        <Button size={'sm'} color="info" onClick={() => openSubcategoryModal(category)}>
+                                        <Button size={'sm'}  className='bg-primary text-white' onClick={() => openSubcategoryModal(category)}>
                                             Manage Subcategories
                                         </Button>
                                         <Button size={'sm'} color="warning" onClick={() => openModalForEdit(category)}>
@@ -277,10 +277,9 @@ const CategoryManager: React.FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <Table.Head>
-                            <Table.HeadCell>Name</Table.HeadCell>
-                            <Table.HeadCell>Description</Table.HeadCell>
-                            <Table.HeadCell>Image</Table.HeadCell>
-                            <Table.HeadCell className='justify-end flex'>Action</Table.HeadCell>
+                            <Table.HeadCell className='bg-primary text-white'>Name</Table.HeadCell>
+                         
+                            <Table.HeadCell className='justify-end flex bg-primary text-white'>Action</Table.HeadCell>
                         </Table.Head>
                         <Table.Body>
                             {deletedCategories.map((category) => (
@@ -288,7 +287,7 @@ const CategoryManager: React.FC = () => {
                                     <Table.Cell>{toTitleCase(category.name)}</Table.Cell>
                                    
                                     <Table.Cell className='justify-end flex'>
-                                        <Button size={'xs'} color="success" onClick={() => handleRestore(category)}>
+                                        <Button size={'xs'} className='bg-primary text-white' onClick={() => handleRestore(category)}>
                                             Restore
                                         </Button>
                                     </Table.Cell>
@@ -340,7 +339,7 @@ const CategoryManager: React.FC = () => {
                             </div>
                         </div>
                         
-                        <Button type="submit" color="green">
+                        <Button type="submit" className='bg-primary text-white'>
                             {currentCategory ? 'Update' : 'Add'} Category
                         </Button>
                     </form>
@@ -385,20 +384,20 @@ const CategoryManager: React.FC = () => {
                                         <Table.Cell className='flex gap-x-3 items-center justify-end'>
                                             <Button
                                                 size={'sm'}
-                                                color="warning"
+                                               className='bg-primary text-white'
                                                 onClick={() => openSubcategoryModalForEdit(subcategory)}
                                             >
                                                 Edit
                                             </Button>
                                             {subcategory.status === "DELETED" ? <Button
                                                 size={'sm'}
-                                                color="success"
+                                                className='bg-primary text-white'
                                                 onClick={() => handleDeleteSubcategory(subcategory)}
                                             >
                                                 Restore
                                             </Button> : <Button
                                                 size={'sm'}
-                                                color="failure"
+                                                className='bg-primary text-white'
                                                 onClick={() => handleDeleteSubcategory(subcategory)}
                                             >
                                                 Delete
@@ -463,7 +462,7 @@ const CategoryManager: React.FC = () => {
                             </div>
                         </div>
 
-                        <Button type="submit" color="green">
+                        <Button type="submit" className='bg-primary text-white'>
                             {currentSubcategory ? 'Update' : 'Add'} Subcategory
                         </Button>
                     </form>

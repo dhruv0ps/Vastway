@@ -24,7 +24,6 @@ const DrawForm = () => {
   const [imageSource, setImageSource] = useState<"upload" | "gallery">("upload"); 
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-  // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL || "http://localhost:5050";
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null); 
   const [formData, setFormData] = useState({
@@ -42,6 +41,9 @@ const DrawForm = () => {
     image: null as File | null,
     imageCaption: "",
     nocCodes: [] as NocCode[],
+    metaTitle: "", 
+    metaDescription: "", 
+    linkEdit: "",
   });
   useEffect(() => {
     if (id) {
@@ -69,6 +71,9 @@ const DrawForm = () => {
           image:draw.image || "",
           imageCaption: draw.imageCaption || "",
           nocCodes: draw.nocCodes || [],
+          metaTitle: draw.metaTitle || "", 
+          metaDescription: draw.metaDescription || "",
+          linkEdit: draw.linkEdit || "",
         });
 
         setSelectedCategory(draw.category || null);
@@ -146,9 +151,21 @@ const DrawForm = () => {
   
 
   const handleRemoveSubcategory = (subcategoryId: string | undefined) => {
-    setSelectedSubcategories(selectedSubcategories.filter(sub => sub._id !== subcategoryId));
-    setFormData(prev => ({ ...prev, subCategories: prev.subCategories.filter(id => id !== subcategoryId) }));
+    if (!subcategoryId) return;
+    setSelectedSubcategories((prev) => prev.filter(sub => sub._id !== subcategoryId));
+    setFormData((prev) => ({
+      ...prev,
+      subCategories: prev.subCategories.filter(sub => {
+        if (typeof sub === "string") {
+          return sub !== subcategoryId;
+        } else if (typeof sub === "object" && sub._id) {
+          return sub._id !== subcategoryId;
+        }
+        return true;
+      }),
+    }));
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,6 +182,9 @@ const DrawForm = () => {
     formDataToSend.append("tieBreakingRule", formData.tieBreakingRule);
     formDataToSend.append("additionalInfo", formData.additionalInfo);
     formDataToSend.append("imageCaption", formData.imageCaption);
+    formDataToSend.append("metaTitle", formData.metaTitle);
+    formDataToSend.append("metaDescription", formData.metaDescription);
+    formDataToSend.append("linkEdit", formData.linkEdit);
   
     formData.subCategories.forEach((subCategory) => {
       if (typeof subCategory === "object" && subCategory._id) {
@@ -229,7 +249,7 @@ const DrawForm = () => {
           />
         </div>
 
-        {/* Category */}
+      
         <div className="col-span-2">
           <Label htmlFor="category" value="Category" />
           <AutocompleteCategory key={formData.category} onSelect={handleCategorySelect} value={selectedCategory} />
@@ -283,14 +303,13 @@ const DrawForm = () => {
           <TextInput
             id="invitationsIssued"
             type="number"
-            placeholder="Invitations Issued"
             value={formData.invitationsIssued}
             onChange={(e) => setFormData({ ...formData, invitationsIssued: e.target.value })}
             required
           />
         </div>
 
-        {/* Draw Date */}
+        
         <div>
           <Label htmlFor="drawDate" value="Draw Date" />
           <input
@@ -309,19 +328,19 @@ const DrawForm = () => {
           <TextInput id="crsCutoff" type="text" placeholder="CRS Cutoff (Optional)" value={formData.crsCutoff} onChange={(e) => setFormData({ ...formData, crsCutoff: e.target.value })} />
         </div>
 
-        {/* Rank Required */}
+        
         <div>
           <Label htmlFor="rankRequired" value="Rank Required" />
           <TextInput id="rankRequired" type="text"  placeholder="Rank Required" value={formData.rankRequired} onChange={(e) => setFormData({ ...formData, rankRequired: e.target.value })} required />
         </div>
 
-        {/* Tie Breaking Rule */}
+       
         <div>
           <Label htmlFor="tieBreakingRule" value="Tie Breaking Rule" />
           <TextInput id="tieBreakingRule" type="text"  placeholder="Tie Breaking Rule" value={formData.tieBreakingRule} onChange={(e) => setFormData({ ...formData, tieBreakingRule: e.target.value })} required />
         </div>
 
-        {/* Additional Info */}
+     
         <div className="col-span-2">
           <Label htmlFor="additionalInfo" value="Additional Information" />
           <Textarea id="additionalInfo" placeholder="Enter additional information..." value={formData.additionalInfo} onChange={(e) => setFormData({ ...formData, additionalInfo: e.target.value })} rows={4} />
@@ -339,7 +358,7 @@ const DrawForm = () => {
             </label>
           </div>
         </div>
-
+        
         {/* Upload Image */}
         {imageSource === "upload" && (
           <div className="col-span-2">
@@ -351,7 +370,7 @@ const DrawForm = () => {
           </div>
         )}
 
-        {/* Select Image from Gallery */}
+        
         {imageSource === "gallery" && (
           <div className="col-span-2">
             <Button onClick={() => setIsGalleryOpen(true)} className="bg-primary text-white">Open Gallery</Button>
@@ -361,8 +380,46 @@ const DrawForm = () => {
           </div>
         )}
 
-        {/* Gallery Picker Modal */}
+     
         <GalleryPicker isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} onSelect={handleSelectImageFromGallery} />
+        <div className="col-span-2">
+          <Label htmlFor="tieBreakingRule" value="ImageCaption" />
+          <TextInput id="imageCaption" type="text"  value={formData.imageCaption} onChange={(e) => setFormData({ ...formData, imageCaption: e.target.value })} required />
+        </div>
+        <div className="col-span-2">
+          <Label htmlFor="metaTitle" value="Meta Title" />
+          <TextInput
+            id="metaTitle"
+            type="text"
+            placeholder="Enter meta title"
+            value={formData.metaTitle}
+            onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
+          />
+        </div>
+
+       
+        <div className="col-span-2">
+          <Label htmlFor="linkEdit" value="Link Edit (Slug)" />
+          <TextInput
+            id="linkEdit"
+            type="text"
+            placeholder="Enter custom URL slug"
+            value={formData.linkEdit}
+            onChange={(e) => setFormData({ ...formData, linkEdit: e.target.value })}
+          />
+        </div>
+
+   
+        <div className="col-span-2">
+          <Label htmlFor="metaDescription" value="Meta Description" />
+          <Textarea
+            id="metaDescription"
+            placeholder="Enter meta description for SEO"
+            value={formData.metaDescription}
+            onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
+            rows={4}
+          />
+        </div>
         <div className="mb-4">
           <Label htmlFor="nocCodes">NOC Codes</Label>
           <AutoCompleteNocCode
@@ -371,7 +428,6 @@ const DrawForm = () => {
             onRemove={handleNocRemove}
           />
         </div>
-          
         {/* Submit Button */}
         <div className="col-span-2">
           <Button type="submit"  className="w-full bg-primary text-white">Submit Draw</Button>

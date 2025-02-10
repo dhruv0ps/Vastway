@@ -7,5 +7,6 @@ export const apiUrl = {
     Gallery: `${base}/gallery`,
     NocCode : `${base}/noccode`,
     LeadCategories : `${base}/lead-categories`,
-    Lead :`${base}/leads`
+    Lead :`${base}/leads`,
+    canadian : `${base}/canadian`
 }

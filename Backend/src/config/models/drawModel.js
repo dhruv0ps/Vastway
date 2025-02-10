@@ -8,7 +8,7 @@ const drawSchema = new mongoose.Schema(
   publishedBy: { type: String, default: "Vastway Immigration" },
   invitationsIssued: { type: Number, required: true },
   drawDate: { type: Date, required: true },
-  crsCutoff: { type: String, default: null },
+  crsCutoff: { type: Number, default: null },
   score: { type: Number, default: null },
   rankRequired: { type: String, required: true },
   tieBreakingRule: { type: String, required: true },
@@ -17,7 +17,10 @@ const drawSchema = new mongoose.Schema(
   imageUrl:{type:String},
   imageCaption: { type: String, default: "" },
   previousDraw: { type: mongoose.Types.ObjectId, ref: "Draw", default: null },
-  nocCodes:[{type:mongoose.Types.ObjectId,ref:"NocCode"}]
+  nocCodes:[{type:mongoose.Types.ObjectId,ref:"NocCode"}],
+  metaTitle:{type:String ,default:null},
+  metaDescription: {type:String ,default:null}, 
+  linkEdit:{type:String ,default:null},
   },
   { timestamps: true }
 );

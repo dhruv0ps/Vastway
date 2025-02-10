@@ -32,10 +32,14 @@ const GetDrawById = async (id:any) => {
 const UpdateDraw = async (id:string,body:any) => {
     return await axiosRequest.put<any>(`${apiUrl.Draw}/${id}`,body)
 }
+const GetDrawByEdit = async (id:any) => {
+    return await axiosRequest.get<any>(`${apiUrl.canadian}/${id}`)
+}
+
 export const drawrAPi = {
     GetCategories,
     AddCategory,
     UpdateCategories, AddsubCategory,
     GetsubCategories,
-    UpdatesubCategories,AddDraw,GetDraw,GetDrawById,UpdateDraw
+    UpdatesubCategories,AddDraw,GetDraw,GetDrawById,UpdateDraw,GetDrawByEdit
 }

@@ -21,10 +21,10 @@ const cloudinaryStorage = new CloudinaryStorage({
     },
 });
 
-// Configuration for image uploads
+
 const imageStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/images/'); // Make sure this directory exists
+        cb(null, 'uploads/images/'); 
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -43,7 +43,7 @@ const imageUpload = multer({
     }
 });
 
-// Configuration for CSV/Excel file uploads
+
 const fileStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/files/'); // Make sure this directory exists
@@ -72,3 +72,4 @@ module.exports = {
     imageUpload,
     fileUpload
 };
+

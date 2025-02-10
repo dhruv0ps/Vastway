@@ -3,7 +3,7 @@ import { Button, TextInput, Label, Spinner } from "flowbite-react";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { nocCodeAPI } from "../../config/apiRoutes/nocCodeRoutes";
-import { FaChevronLeft } from "react-icons/fa6";
+
 interface NocCode {
   tier: string;
   nocCode: string;
@@ -26,7 +26,7 @@ const NocCodeForm: React.FC = () => {
   const fetchNocCode = async (nocId: string) => {
     try {
       const response = await nocCodeAPI.GetNocCodeById(nocId);
-      setNocData(response.data);
+      setNocData(response.data.data);
     } catch (error) {
       toast.error("Error fetching NOC Code");
     } finally {
@@ -67,18 +67,10 @@ const NocCodeForm: React.FC = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-md">
-      <Button color="gray" onClick={() => navigate(-1)}>
-                <span className="flex gap-2 items-center">
-                  <FaChevronLeft />
-                  Back
-                </span>
-              </Button>
-      <h2 className="text-2xl font-semibold mb-4 flex justify-center">{id ? "Edit NOC Code" : "Add New NOC Code"}</h2>
-
+    <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-md">
+      <h2 className="text-2xl font-semibold mb-4">{id ? "Edit NOC Code" : "Add New NOC Code"}</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-
           <Label htmlFor="tier">Tier</Label>
           <TextInput id="tier" name="tier" value={nocData.tier} onChange={handleChange} required />
         </div>
@@ -90,7 +82,7 @@ const NocCodeForm: React.FC = () => {
           <Label htmlFor="classTitle">Class Title</Label>
           <TextInput id="classTitle" name="classTitle" value={nocData.classTitle} onChange={handleChange} required />
         </div>
-        <Button type="submit" isProcessing={loading} className="w-full bg-primary text-white">
+        <Button type="submit" isProcessing={loading} className="w-full">
           {id ? "Update NOC Code" : "Create NOC Code"}
         </Button>
       </form>

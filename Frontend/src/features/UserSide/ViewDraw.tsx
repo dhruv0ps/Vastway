@@ -10,7 +10,7 @@ const ViewDraw: React.FC = () => {
         const fetchDraws = async () => {
           try {
             const response = await drawrAPi.GetDraw();
-            setDraws(response.data); // Assuming response.data is an array
+            setDraws(response.data); 
           } catch (error) {
             console.error("Error fetching draws:", error);
           }

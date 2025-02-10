@@ -35,6 +35,17 @@ const drawController = {
       return res.json({ status: false, data: {}, err: error.message });
     }
   },
+  async getDrawByLinkEdit(req, res) {
+    try {
+      const { id } = req.params;
+      const draw = await drawService.getDrawByLinkEdit(id);
+      if (!draw) return res.status(404).json({ status: false, data: {}, err: "Draw not found" });
+
+      return res.json({ status: true, data: draw, err: {} });
+    } catch (error) {
+      return res.json({ status: false, data: {}, err: error.message });
+    }
+  },
 
   async updateDraw(req, res) {
     try {

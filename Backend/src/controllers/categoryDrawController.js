@@ -10,6 +10,15 @@ const addCategory = async (req, res) => {
     return res.json({ status: false, data: {}, err: error.message });
   }
 };
+const updateCategory = async (req, res) => {
+  try {
+    const { name, singleDigitKey } = req.body;
+    const updatedCategory = await configServices.updateCategory(req.params.id, name, singleDigitKey);
+    return res.json({ status: true, data: updatedCategory, err: {} });
+  } catch (error) {
+    return res.json({ status: false, data: {}, err: error.message });
+  }
+};
 
 const getAllCategories = async (req, res) => {
   try {
@@ -51,7 +60,15 @@ const addSubCategory = async (req, res) => {
     return res.json({ status: false, data: {}, err: error.message });
   }
 };
-
+const updateSubCategory = async (req, res) => {
+  try {
+    const { name, ID, categoryId } = req.body;
+    const updatedSubCategory = await configServices.updateSubCategory(req.params.id, name, ID, categoryId);
+    return res.json({ status: true, data: updatedSubCategory, err: {} });
+  } catch (error) {
+    return res.json({ status: false, data: {}, err: error.message });
+  }
+};
 const getAllSubCategories = async (req, res) => {
   try {
     
@@ -91,5 +108,5 @@ module.exports = {
   addSubCategory,
   getAllSubCategories,
   getSubCategoryById,
-  deleteSubCategory,
+  deleteSubCategory,updateCategory,updateSubCategory
 };

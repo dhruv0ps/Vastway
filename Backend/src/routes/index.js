@@ -15,7 +15,7 @@ router.post("/categories", categoryController.addCategory);
 router.get("/categories", categoryController.getAllCategories);
 router.get("/categories/:id", categoryController.getCategoryById);
 router.delete("/categories/:id", categoryController.deleteCategory);
-
+router.put("/categories/:id", categoryController.updateCategory);
 router.post("/subcategories/:id", categoryController.addSubCategory);
 router.get("/subcategories/:id", categoryController.getAllSubCategories);
 // router.get("/subcategories/:id", categoryController.getSubCategoryById);
@@ -26,6 +26,7 @@ router.get("/draws", drawController.getAllDraws);
 router.get("/draws/:id", drawController.getDrawById);
 router.put("/draws/:id", imageUpload.single("image"), drawController.updateDraw);
 router.delete("/draws/:id", drawController.deleteDraw);
+router.get("/canadian/:id",drawController.getDrawByLinkEdit)
 
 router.post("/gallery",imageUpload.single("image"), galleryController.uploadImage);
 router.get("/gallery", galleryController.getImages);
@@ -39,10 +40,10 @@ router.put("/noccode/:id", NocCodeController.updateNocCode);
 router.delete("/noccode/:id", NocCodeController.deleteNocCode);
 router.post("/noccode/bulk-upload", fileUpload.single("file"), NocCodeController.bulkUpload);
 
-router.post("/leads", LeadController.createLead);
+router.post("/leads",imageUpload.array("images",5), LeadController.createLead);
 router.get("/leads", LeadController.getAllLeads);
 router.get("/leads/:id", LeadController.getLeadById);
-router.put("/leads/:id", LeadController.updateLead);
+router.put("/leads/:id",imageUpload.array("images",5), LeadController.updateLead);
 router.delete("/leads/:id", LeadController.deleteLead);
 
 

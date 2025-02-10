@@ -25,6 +25,8 @@ import { ImageGallery } from './features/Gallery/imageGallery.tsx';
 import NocCodeForm from './features/Draw/NoccodeFrom.tsx';
 import NocCodeList from './features/Draw/NocCodeList.tsx';
 import LeadCategoryList from './features/Leads/LeadCategoryList.tsx';
+import LeadForm from './features/Leads/leadfrom.tsx';
+import LeadList from './features/Leads/LeadList.tsx';
 
 const stores = { authStore };
 const router = createBrowserRouter([
@@ -57,17 +59,24 @@ const router = createBrowserRouter([
       },{
         path:"/noccode",
         element:<NocCodeForm/>
-      },
-      {
-        path:"/noccode/:id",
-        element:<NocCodeForm/>
       },{
         path:"/noccode/list",
         element:<NocCodeList/>
       },{
         path:"/lead-category",
         element:<LeadCategoryList/>
-      }
+      },{
+        path:"/lead-form",
+        element:<LeadForm/>
+      },
+      {
+        path:"/lead-form/:id",
+        element:<LeadForm/>
+      },
+      {
+        path:"/lead-list",
+        element:<LeadList/>
+      },
      
     ]
   },
@@ -82,6 +91,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/view",
+        element: <DrawDetailsPage />,
+      },
+      {
+        path: "/view/:linkEdit",
         element: <DrawDetailsPage />,
       },
       {

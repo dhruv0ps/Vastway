@@ -35,6 +35,37 @@ const drawService = {
       .populate("nocCodes")
       .populate("previousDraw", "title drawDate");
   },
+  async getDrawByLinkEdit(id) {
+    try {
+     
+      const draw = await Draw.findOne({ linkEdit: id })
+        .populate("category", "name")
+        .populate("subCategories", "name")
+        .populate("nocCodes")
+        .populate("previousDraw", "title drawDate");
+  
+      if (!draw) {
+        return null; 
+      }
+  
+     
+      const relatedDraws = await Draw.find({
+        category: draw.category?._id,
+        _id: { $ne: draw._id }, 
+      })
+        .populate("subCategories", "name")
+  
+      return {
+        draw,
+        relatedDraws,
+      };
+    } catch (error) {
+      console.error("Error fetching draw by linkEdit:", error);
+      throw new Error("Error fetching draw details.");
+    }
+  }
+,  
+
 
   async updateDraw(id, drawData) {
     return await Draw.findByIdAndUpdate(id, drawData, { new: true });

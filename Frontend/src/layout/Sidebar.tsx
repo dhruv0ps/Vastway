@@ -250,6 +250,8 @@ const NavSideBar = ({ isSidebarOpen, onSidebarClose }: any) => {
                 icon={MdSupportAgent}
                 label="Leads"
             >
+                  <Link to={"/lead-list"}><Sidebar.Item >Lead List</Sidebar.Item></Link>
+                 <Link to={"/lead-form"}><Sidebar.Item >Lead Form</Sidebar.Item></Link>
                  <Link to={"/lead-category"}><Sidebar.Item >LeadCategory</Sidebar.Item></Link>
                 {/* {canEditTicket && <Link to={"/tickets/add"}><Sidebar.Item>Create Tickets</Sidebar.Item></Link>} */}
             </CustomCollapse >

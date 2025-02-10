@@ -1,6 +1,4 @@
-const Lead = require("../config/models/LeadModel");
-const LeadCategory = require("../config/models/LeadModel")
-
+const {Lead,LeadCategory} = require("../config/models/LeadModel")
  const LeadService = {
 
   async createLead(data) {
