@@ -12,18 +12,40 @@ const ImageModel = require("../config/models/GalleryModel");
         await newImage.save();
         return newImage;
       } catch (error) {
-        console.log(error)
         throw new Error(error);
       }
     },
   
-    async getImages() {
+    async getImages({ search = "", sort = "asc", page = 1, limit = 10 }) {
       try {
-        return await ImageModel.find();
+        const query = {};
+    
+        if (search) {
+          query.title = { $regex: search, $options: "i" };
+        }
+    
+        const sortOption = sort === "desc" ? -1 : 1;
+        const skip = (page - 1) * limit;
+    
+        const images = await ImageModel.find(query)
+          .sort({ title: sortOption })
+          .skip(skip)
+          .limit(limit);
+    
+        const totalImages = await ImageModel.countDocuments(query);
+        const totalPages = Math.ceil(totalImages / limit);
+    
+        return {
+          images,
+          totalPages,
+          currentPage: page,
+          totalImages,
+        };
       } catch (error) {
         throw new Error("Error fetching images");
       }
     },
+    
   
     async updateImage(id, updateData,file) {
       try {

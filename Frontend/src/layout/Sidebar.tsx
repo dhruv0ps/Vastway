@@ -5,7 +5,7 @@ import { FaRoute, FaShop, FaUser,  FaMoneyBills, FaUpload } from "react-icons/fa
 import { HiChartPie, HiOutlineMinusSm, HiOutlinePlusSm, HiShoppingBag } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 import { useStore } from "../store/useStore";
-import { MdManageAccounts, MdSupportAgent } from "react-icons/md";
+import {  MdSupportAgent } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import showConfirmationModal from "../util/Confirmation";
@@ -136,10 +136,10 @@ const NavSideBar = ({ isSidebarOpen, onSidebarClose }: any) => {
                 icon={BsFillClipboard2CheckFill}
                 label="Draws"
             >
-                 <Link to={"/draw/add"}><Sidebar.Item>Add Draw</Sidebar.Item></Link>
-                 <Link to={"/drawlist"}><Sidebar.Item>Draw List</Sidebar.Item></Link>
-                 <Link to={"/category"}><Sidebar.Item>Category Manager</Sidebar.Item></Link>
-                 <Link to={"/noccode/list"}><Sidebar.Item>NocCode</Sidebar.Item></Link>
+                 <Link to={"/admin/draw/add"}><Sidebar.Item>Add Draw</Sidebar.Item></Link>
+                 <Link to={"/admin/drawlist"}><Sidebar.Item>Draw List</Sidebar.Item></Link>
+                 <Link to={"/admin/category"}><Sidebar.Item>Category Manager</Sidebar.Item></Link>
+                 <Link to={"/admin/noccode/list"}><Sidebar.Item>NocCode</Sidebar.Item></Link>
                  
                
             </CustomCollapse >
@@ -250,9 +250,9 @@ const NavSideBar = ({ isSidebarOpen, onSidebarClose }: any) => {
                 icon={MdSupportAgent}
                 label="Leads"
             >
-                  <Link to={"/lead-list"}><Sidebar.Item >Lead List</Sidebar.Item></Link>
-                 <Link to={"/lead-form"}><Sidebar.Item >Lead Form</Sidebar.Item></Link>
-                 <Link to={"/lead-category"}><Sidebar.Item >LeadCategory</Sidebar.Item></Link>
+                  <Link to={"/admin/lead-list"}><Sidebar.Item >Lead List</Sidebar.Item></Link>
+                 <Link to={"/admin/lead-form"}><Sidebar.Item >Lead Form</Sidebar.Item></Link>
+                 <Link to={"/admin/lead-category"}><Sidebar.Item >LeadCategory</Sidebar.Item></Link>
                 {/* {canEditTicket && <Link to={"/tickets/add"}><Sidebar.Item>Create Tickets</Sidebar.Item></Link>} */}
             </CustomCollapse >
         );
@@ -266,7 +266,7 @@ const NavSideBar = ({ isSidebarOpen, onSidebarClose }: any) => {
                 icon={FaUpload}
                 label="Gallery"
             >
- { <Link to={"gallery/"}><Sidebar.Item >Gallery</Sidebar.Item></Link>}
+ { <Link to={"/admin/gallery/"}><Sidebar.Item >Gallery</Sidebar.Item></Link>}
               
 
             </CustomCollapse >
@@ -290,15 +290,15 @@ const NavSideBar = ({ isSidebarOpen, onSidebarClose }: any) => {
                     <TicketSection />
                     <InventorySection />
                     
-                        <CustomCollapse
+                        {/* <CustomCollapse
                             id="userManagement"
                             icon={MdManageAccounts}
                             label="User Management"
                         >
                             <Link to={"/users"}><Sidebar.Item >View User</Sidebar.Item> </Link>
-                            {/* <Link to={"/users/add"}><Sidebar.Item >Add User</Sidebar.Item> </Link> */}
+                            <Link to={"/users/add"}><Sidebar.Item >Add User</Sidebar.Item> </Link>
                             <Link to={"/admin/roles"}><Sidebar.Item >Role Management</Sidebar.Item> </Link>
-                        </CustomCollapse >
+                        </CustomCollapse > */}
                    
 
                     

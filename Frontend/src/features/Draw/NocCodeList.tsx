@@ -50,7 +50,7 @@ const NocCodeList: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">NOC Codes</h2>
-        <Button className="bg-primary" onClick={() => navigate("/noccode")}>
+        <Button className="bg-primary" onClick={() => navigate("/admin/noccode")}>
           Add NOC Code
         </Button>
       </div>
@@ -86,7 +86,7 @@ const NocCodeList: React.FC = () => {
                   <Table.Cell>{noc?.tier}</Table.Cell>
                   <Table.Cell>{noc?.classTitle}</Table.Cell>
                   <Table.Cell>
-                    <Button  size="sm" onClick={() => navigate(`/noc-codes/edit/${noc._id}`)} className="bg-primary">
+                    <Button  size="sm" onClick={() => navigate(`/admin/noc-codes/edit/${noc._id}`)} className="bg-primary">
                     
                       Edit
                     </Button>

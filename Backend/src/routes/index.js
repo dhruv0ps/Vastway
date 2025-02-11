@@ -29,7 +29,7 @@ router.delete("/draws/:id", drawController.deleteDraw);
 router.get("/canadian/:id",drawController.getDrawByLinkEdit)
 
 router.post("/gallery",imageUpload.single("image"), galleryController.uploadImage);
-router.get("/gallery", galleryController.getImages);
+router.post("/gallery/images", galleryController.getImages);
 router.put("/gallery/:id",imageUpload.single("image"), galleryController.updateImage);
 router.delete("/gallery/:id", galleryController.deleteImage);
 

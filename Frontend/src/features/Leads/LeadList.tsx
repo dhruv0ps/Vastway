@@ -65,7 +65,7 @@ const LeadList: React.FC = () => {
     <div className="max-w-5xl mx-auto p-6 ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Leads List</h2>
-        <Button onClick={() => navigate("/lead-form")} className="bg-primary text-white">+ Add Lead</Button>
+        <Button onClick={() => navigate("/admin/lead-form")} className="bg-primary text-white">+ Add Lead</Button>
       </div>
       <div className="relative mb-4">
         <TextInput
@@ -98,7 +98,7 @@ const LeadList: React.FC = () => {
               <Table.Cell>{lead.phoneNumber}</Table.Cell>
               <Table.Cell>{lead.emailId}</Table.Cell>
               <Table.Cell>
-                <Button size="xs" onClick={() => navigate(`/lead-form/${lead._id}`)} className="bg-primary text-white">Edit</Button>
+                <Button size="xs" onClick={() => navigate(`/admin/lead-form/${lead._id}`)} className="bg-primary text-white">Edit</Button>
               </Table.Cell>
             </Table.Row>
           ))}

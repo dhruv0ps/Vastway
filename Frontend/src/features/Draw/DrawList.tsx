@@ -43,7 +43,7 @@ const DrawList: React.FC = () => {
   }, []);
 
   const handleEdit = (id: string) => {
-    navigate(`/draw/add/${id}`);
+    navigate(`/admin/draw/add/${id}`);
   };
 
   // 🔍 Searching
@@ -94,7 +94,9 @@ const DrawList: React.FC = () => {
     <div className="container mx-auto py-8 px-4">
       <h2 className="text-3xl font-bold text-gray-900 mb-6">Draws List</h2>
 
-      {/* 🔍 Search Input */}
+    <div className="flex justify-end items-end mr-4">
+      <Button className="bg-primary text-white" onClick={() => navigate("/admin/draw/add")}>Add Draw</Button>
+      </div>
       <div className="mb-4 flex justify-between">
         <TextInput
           type="text"

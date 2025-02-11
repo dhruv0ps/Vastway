@@ -27,54 +27,55 @@ import NocCodeList from './features/Draw/NocCodeList.tsx';
 import LeadCategoryList from './features/Leads/LeadCategoryList.tsx';
 import LeadForm from './features/Leads/leadfrom.tsx';
 import LeadList from './features/Leads/LeadList.tsx';
+import HomePage from './features/UserSide/Homepage.tsx';
 
 const stores = { authStore };
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/admin",
     element: <Home />, // Use MainLayout for routes that need the sidebar
     children: [
       {
-        path: "/",
+        path: "/admin",
         element: <Dashboard />,
       },
       {
-        path: "/draw/add",
+        path: "/admin/draw/add",
         element: <DrawForm />,
       },
       {
-        path: "/draw/add/:id",
+        path: "/admin/draw/add/:id",
         element: <DrawForm />,
       },
       {
-        path:"/category",
+        path:"/admin/category",
         element:<CategoryManager/>
       },
       {
-        path:"/drawlist",
+        path:"/admin/drawlist",
         element:<DrawList/>
       },{
-        path:"/gallery",
+        path:"/admin/gallery",
         element:<ImageGallery/>
       },{
-        path:"/noccode",
+        path:"/admin/noccode",
         element:<NocCodeForm/>
       },{
-        path:"/noccode/list",
+        path:"/admin/noccode/list",
         element:<NocCodeList/>
       },{
-        path:"/lead-category",
+        path:"/admin/lead-category",
         element:<LeadCategoryList/>
       },{
-        path:"/lead-form",
+        path:"/admin/lead-form",
         element:<LeadForm/>
       },
       {
-        path:"/lead-form/:id",
+        path:"/admin/lead-form/:id",
         element:<LeadForm/>
       },
       {
-        path:"/lead-list",
+        path:"/admin/lead-list",
         element:<LeadList/>
       },
      
@@ -86,12 +87,15 @@ const router = createBrowserRouter([
   //   element: <Login />,
   // },
   {
-    path: "/view",
+    path: "/",
     element: <UserHome />,
     children: [
+      // {
+      //   path:"/view"
+      // }
       {
-        path: "/view",
-        element: <DrawDetailsPage />,
+        path: "/",
+        element: <HomePage/>,
       },
       {
         path: "/view/:linkEdit",

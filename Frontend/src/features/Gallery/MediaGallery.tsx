@@ -23,7 +23,7 @@ export const MediaGallery: React.FC = () => {
 
   const fetchImages = async () => {
     try {
-      const response = await galleryAPI.GetImages();
+      const response = await galleryAPI.GetImages({});
       setImages(response.data);
     } catch (error) {
       console.error("Error fetching images:", error);

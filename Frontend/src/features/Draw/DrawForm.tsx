@@ -214,7 +214,7 @@ const DrawForm = () => {
         const res = await drawrAPi.AddDraw(formDataToSend);
         if (res.status) {
           toast.success("Draw successfully added.");
-          navigate("/drawlist");
+          navigate("/admin/drawlist");
         }
       }
     } catch (error) {

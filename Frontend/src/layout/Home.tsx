@@ -33,7 +33,9 @@ const Home = observer(() => {
           </div>
           <Outlet />
         </div>
+        
       </div>
+
     </>
   )
 })

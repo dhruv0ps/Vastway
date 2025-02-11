@@ -1,116 +1,209 @@
 import React, { useState } from 'react';
 import { MediaLibrary } from './MediaLibrary';
 import { UploadComponent } from './uploadcomponent';
-import { ImageFile } from '../../config/models/gallery'
+import { ImageFile, ImageDetails } from '../../config/models/gallery';
 import { galleryAPI } from '../../config/apiRoutes/galleryRoutes';
-
-type Tab = 'upload' | 'library';
+import { Tabs } from 'flowbite-react';
+import { Upload, Image as ImageIcon } from 'lucide-react';
+import { toast } from "react-toastify";
 
 export const ImageGallery: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>('upload');
+  const [activeTab, setActiveTab] = useState('upload');
   const [selectedImages, setSelectedImages] = useState<ImageFile[]>([]);
+  const [_imageDetails, setImageDetails] = useState<Record<string, ImageDetails>>({});
+  // const [isUploading, setIsUploading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [limit, _setLimit] = useState(10);
 
-  const handleCreateNewImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("title", file.name);
-
+  const refreshGallery = async () => {
     try {
-      const response = await galleryAPI.UploadImage(formData);
-      console.log('Image uploaded successfully:', response.data);
+      const response = await galleryAPI.GetImages({  limit });
+      return response.data;
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error fetching gallery:", error);
+      toast.error("Error fetching gallery data");
+      return [];
     }
   };
 
-  const clearSelection = () => {
-    setSelectedImages([]);
+  // Handle tab change
+  const handleTabChange = async (tab: number) => {
+    const newTab = tab === 0 ? 'upload' : 'library';
+    setActiveTab(newTab);
+    setSelectedImages([]); 
+    setImageDetails({}); 
+    setRefreshKey(prev => prev + 1); 
+    
+    if (newTab === 'library') {
+      await refreshGallery();
+    }
   };
-  console.log(selectedImages)
+
+  // const handleUpload = async () => {
+  //   setIsUploading(true);
+  //   try {
+  //     for (const image of selectedImages) {
+  //       const formData = new FormData();
+  //       if (!image.file) {
+  //         console.error("File is undefined for image:", image);
+  //         return;
+  //       }
+  //       formData.append("image", image.file);
+        
+  //       const details = imageDetails[image.url];
+  //       if (details) {
+  //         formData.append("title", details.title || image.file.name);
+  //         formData.append("caption", details.caption || '');
+  //         formData.append("altText", details.altText || '');
+  //       }
+
+  //       const response = await galleryAPI.UploadImage(formData);
+  //       if(response.status) {
+  //         toast.success("Image uploaded successfully!");
+  //       }
+  //     }
+  //     setLimit(10);
+  //     setSelectedImages([]);
+  //     setImageDetails({});
+  //     await refreshGallery();
+  //   } catch (error) {
+  //     toast.error("Error uploading images");
+  //   } finally {
+  //     setIsUploading(false);
+  //   }
+  // };
+
+  // const handleDetailChange = (image: ImageFile, key: keyof ImageDetails, value: string) => {
+  //   setImageDetails(prev => ({
+  //     ...prev,
+  //     [image.url]: {
+  //       ...prev[image.url],
+  //       [key]: value
+  //     }
+  //   }));
+  // };
+
   return (
-    <div className=" m-4 lg:m-10 rounded-lg flex flex-col h-[calc(100vh-2rem)] lg:h-[calc(100vh-5rem)]">
-      {/* Header */}
-      <div className="flex justify-between items-center px-4 lg:px-6 py-4 border-b">
-        <h2 className="text-xl font-semibold text-gray-800">Create Gallery</h2>
-      </div>
+    <div className='p-8'>
 
-      {/* Tabs */}
-      <div className="border-b px-4 lg:px-6">
-        <div className="flex gap-6">
-          <button
-            className={`px-4 py-3 font-medium ${
-              activeTab === 'upload'
-                ? 'text-gray-900 border-b-2 border-gray-900'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-            onClick={() => setActiveTab('upload')}
-          >
-            Upload Files
-          </button>
-          <button
-            className={`px-4 py-3 font-medium ${
-              activeTab === 'library'
-                ? 'text-gray-900 border-b-2 border-gray-900'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-            onClick={() => setActiveTab('library')}
-          >
-            Media Library
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 overflow-hidden">
-        {activeTab === 'upload' ? (
-          <UploadComponent
-            onImageSelect={setSelectedImages}
-            selectedImages={selectedImages}
-          />
-        ) : (
-          <MediaLibrary
-            onImageSelect={setSelectedImages}
-            selectedImages={selectedImages}
-          />
-        )}
-      </div>
-
-      {/* Selected Items Bar */}
-      {selectedImages.length > 0 && (
-        <div className="border-t px-4 lg:px-6 py-3 bg-white">
-          <div className="flex flex-wrap items-center gap-4">
-            <span className="text-sm text-gray-600">
-              {selectedImages.length} selected
-            </span>
-            <button
-              onClick={clearSelection}
-              className="text-red-600 text-sm hover:underline"
-            >
-              Clear
-            </button>
-            <div className="flex-1 overflow-x-auto flex gap-2">
-              {selectedImages.map((img, index) => (
-                <img
-                  key={index}
-                  src={img.url}
-                  alt="Selected thumbnail"
-                  className="w-10 h-10 object-cover rounded"
-                />
-              ))}
+   
+    <div className="w-full p-4 bg-white border border-gray-200 rounded-lg shadow">
+      <Tabs 
+        aria-label="Image gallery tabs" 
+        style="underline"
+        onActiveTabChange={handleTabChange}
+      >
+        <Tabs.Item 
+          active={activeTab === 'upload'}
+          icon={() => <Upload className="w-4 h-4" />}
+          title="Upload Files"
+        >
+          <div className="flex">
+            <div className="flex-1">
+              <UploadComponent
+                key={`upload-${refreshKey}`}
+                onImageSelect={setSelectedImages}
+                selectedImages={selectedImages}
+              />
             </div>
-            <button
-              onClick={() => {
-                if (selectedImages.length > 0 && selectedImages[0].file) {
-                  handleCreateNewImage(selectedImages[0].file);
-                }
-              }}
-              className="px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
-            >
-              Create Gallery
-            </button>
+            
+            {/* {selectedImages.length > 0 && (
+              <div className="w-80 border-l border-gray-200 p-4 lg:p-6 overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-lg font-medium text-gray-900">Attachment Details</h3>
+                  <Button
+                    onClick={handleUpload}
+                    disabled={isUploading}
+                    size="sm"
+                    className='bg-primary text-white'
+                  >
+                    {isUploading ? (
+                      <>
+                        <Spinner size="sm" className="mr-2" />
+                        Uploading...
+                      </>
+                    ) : (
+                      'Upload'
+                    )}
+                  </Button>
+                </div>
+                
+                {selectedImages.map((image, index) => (
+                  <div key={index} className="space-y-4 mb-8">
+                    <img
+                      src={image.url}
+                      alt="Selected preview"
+                      className="w-full aspect-square object-cover rounded-lg"
+                    />
+                    <div className="space-y-3">
+                      <div>
+                        <div className="mb-2 block">
+                          <label htmlFor={`title-${index}`} className="text-sm font-medium text-gray-900">
+                            Title
+                          </label>
+                        </div>
+                        <TextInput
+                          id={`title-${index}`}
+                          type="text"
+                          value={imageDetails[image.url]?.title || ''}
+                          onChange={(e) => handleDetailChange(image, 'title', e.target.value)}
+                          placeholder="Enter title"
+                          sizing="sm"
+                        />
+                      </div>
+                      <div>
+                        <div className="mb-2 block">
+                          <label htmlFor={`caption-${index}`} className="text-sm font-medium text-gray-900">
+                            Caption
+                          </label>
+                        </div>
+                        <TextInput
+                          id={`caption-${index}`}
+                          type="text"
+                          value={imageDetails[image.url]?.caption || ''}
+                          onChange={(e) => handleDetailChange(image, 'caption', e.target.value)}
+                          placeholder="Enter caption"
+                          sizing="sm"
+                        />
+                      </div>
+                      <div>
+                        <div className="mb-2 block">
+                          <label htmlFor={`alt-${index}`} className="text-sm font-medium text-gray-900">
+                            Alt Text
+                          </label>
+                        </div>
+                        <TextInput
+                          id={`alt-${index}`}
+                          type="text"
+                          value={imageDetails[image.url]?.altText || ''}
+                          onChange={(e) => handleDetailChange(image, 'altText', e.target.value)}
+                          placeholder="Enter alt text"
+                          sizing="sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )} */}
           </div>
-        </div>
-      )}
+        </Tabs.Item>
+
+        <Tabs.Item
+          active={activeTab === 'library'}
+          icon={() => <ImageIcon className="w-4 h-4" />}
+          title="Media Library"
+        >
+          <MediaLibrary
+            key={`library-${refreshKey}`}
+            onImageSelect={setSelectedImages}
+            selectedImages={selectedImages}
+          />
+        </Tabs.Item>
+      </Tabs>
+    </div>
     </div>
   );
 };
+
+export default ImageGallery;

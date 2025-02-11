@@ -30,3 +30,13 @@ export interface NocCode {
     linkEdit: string;
     imageUrl?: File | null;
   }
+  export interface DrawList {
+    id: string;
+    title: string;
+    image: string;
+    imageUrl: string;
+    category: { name: string };
+    drawDate: string;
+    candidates: number;
+    linkEdit : string;
+  }

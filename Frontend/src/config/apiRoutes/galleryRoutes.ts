@@ -5,8 +5,8 @@ const UploadImage = async (body:any) => {
     return await axiosRequest.post<any>(`${apiUrl.Gallery}`, body);
 };
 
-const GetImages = async () => {
-    return await axiosRequest.get<any>(`${apiUrl.Gallery}`);
+const GetImages = async (body:any) => {
+    return await axiosRequest.post<any>(`${apiUrl.Gallery}/images`,body);
 };
 
 const UpdateImage = async(id: string, body: any) => {

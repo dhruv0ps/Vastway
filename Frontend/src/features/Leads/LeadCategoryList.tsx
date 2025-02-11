@@ -58,7 +58,7 @@ const LeadCategoryList: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-lg rounded-md">
+    <div className="container mx-auto p-6 px bg-white shadow-lg rounded-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Lead Categories</h2>
         <Button color="blue" className="bg-primary text-white" onClick={() => setIsModalOpen(true)}>

@@ -1,19 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { drawrAPi } from "../../config/apiRoutes/drawroutes";
-import { Card, TextInput, Button, Label } from "flowbite-react";
+import { Card, TextInput, Button, Label,Spinner } from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
 import ColorThief from "color-thief-browser";
-interface Draw {
-  id: string;
-  title: string;
-  image: string;
-  imageUrl: string;
-  category: { name: string };
-  drawDate: string;
-  candidates: number;
-  linkEdit : string;
-}
+import { DrawList } from "../../config/models/draw";
+
 
 const categoryColors: { [key: string]: string } = {
   "Alberta PNP": "#D1E3FF",
@@ -23,22 +15,25 @@ const categoryColors: { [key: string]: string } = {
 };
 
 export default function CanadianDraws() {
-  const [draws, setDraws] = useState<Draw[]>([]);
-  const [filteredDraws, setFilteredDraws] = useState<Draw[]>([]);
+  const [draws, setDraws] = useState<DrawList[]>([]);
+  const [filteredDraws, setFilteredDraws] = useState<DrawList[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const imgRefs = useRef<{ [key: string]: HTMLImageElement | null }>({});
   const [_borderColors, setBorderColors] = useState<{ [key: string]: string }>({});
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchDraws = async () => {
+      setLoading(true)
       try {
         const response = await drawrAPi.GetDraw();
         setDraws(response.data);
         setFilteredDraws(response.data);
+        
       } catch (error) {
         console.error("Error fetching draws:", error);
       }
+      setLoading(false)
     };
     fetchDraws();
   }, []);
@@ -74,17 +69,26 @@ export default function CanadianDraws() {
   };
 
   const categories = ["All", ...new Set(draws.map((draw) => draw.category.name))];
-
+ if (loading) {
+      return (
+        <section className="py-10 font-['Lexend',sans-serif] max-w-[1200px] mx-auto">
+          <div className="container mx-auto px-4 min-h-[400px] flex items-center justify-center">
+            <Spinner size="xl"  />
+          </div>
+        </section>
+      );
+    }
+  
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Header */}
+    
       <header className="max-w-5xl mx-auto text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Canadian Draws</h1>
         <p className="text-xl text-gray-600">Explore the latest immigration opportunities in Canada</p>
       </header>
 
       <main className="max-w-5xl mx-auto">
-        {/* Search and Filter Section */}
+       
         <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="w-full sm:w-auto">
             <TextInput
@@ -116,7 +120,7 @@ export default function CanadianDraws() {
                 className="h-full hover:shadow-lg transition-shadow cursor-pointer rounded-lg"
                 style={{
                   borderColor: categoryColors[item.category.name] || "#ddd",
-                  
+                  borderRadius:"2px", borderTopStyle:"solid", borderWidth:"2px"
                 }}
               >
                 <div className="relative h-48 overflow-hidden rounded-t-lg">
@@ -125,8 +129,8 @@ export default function CanadianDraws() {
                       // ref={(el) => (imgRefs.current[item.id] = el)}
                       src={item.imageUrl || item.image}
                       alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onLoad={() => extractColor(item.id, imgRefs.current[item.id]!)}
+                      className="absolute inset-0 w-full h-full object-cover "
+                      // onLoad={() => extractColor(item.id, imgRefs.current[item.id]!)}
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full bg-gray-100">

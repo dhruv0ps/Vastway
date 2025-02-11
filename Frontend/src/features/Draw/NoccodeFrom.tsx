@@ -50,7 +50,7 @@ const NocCodeForm: React.FC = () => {
         await nocCodeAPI.CreateNocCode(nocData);
         toast.success("NOC Code created successfully!");
       }
-      navigate("/noc-codes");
+      navigate("/admin/noc-codes");
     } catch (error) {
       toast.error("Error saving NOC Code");
     } finally {

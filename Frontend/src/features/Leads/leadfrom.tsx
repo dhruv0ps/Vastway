@@ -148,7 +148,7 @@ const LeadForm: React.FC = () => {
         await leadCategoryAPI.createLead(data);
         toast.success("Lead created successfully!");
       }
-      navigate("/lead-list");
+      navigate("/admin/lead-list");
     } catch (error) {
       toast.error("Failed to save lead.");
     } finally {
@@ -157,7 +157,7 @@ const LeadForm: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-lg border border-gray-200">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">{id ? "Edit Lead" : "Add New Lead"}</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

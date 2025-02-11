@@ -1,32 +1,68 @@
-import React, { useState } from 'react';
-import { Check, Square } from 'lucide-react';
-import { clsx } from 'clsx';
-import { ImageFile } from "../../config/models/gallery";
-
+import React, { useState } from "react";
+import { Check, Square, Upload } from "lucide-react";
+import { clsx } from "clsx";
+import { galleryAPI } from "../../config/apiRoutes/galleryRoutes";
+import { ImageFile, } from "../../config/models/gallery";
+import { toast } from 'react-toastify';
 interface UploadComponentProps {
   onImageSelect: (images: ImageFile[]) => void;
   selectedImages: ImageFile[];
 }
 
-export const UploadComponent: React.FC<UploadComponentProps> = ({ onImageSelect, selectedImages }) => {
+export const UploadComponent: React.FC<UploadComponentProps> = ({
+  onImageSelect,
+  selectedImages,
+}) => {
   const [images, setImages] = useState<ImageFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newImages: ImageFile[] = Array.from(e.target.files).map((file) => ({
+      const uploadedFiles = Array.from(e.target.files);
+      const newImages = uploadedFiles.map((file) => ({
         file,
         url: URL.createObjectURL(file),
         size: file.size,
       }));
-      setImages([...images, ...newImages]);
+
+      setImages((prev) => [...prev, ...newImages]);
     }
   };
 
   const handleImageSelect = (image: ImageFile) => {
-    const newSelection = selectedImages.includes(image)
-      ? selectedImages.filter((img) => img !== image)
+    const isSelected = selectedImages.some((img) => img.url === image.url);
+    const newSelection = isSelected
+      ? selectedImages.filter((img) => img.url !== image.url)
       : [...selectedImages, image];
+
     onImageSelect(newSelection);
+  };
+
+  const handleUploadImages = async () => {
+    if (selectedImages.length === 0) return;
+    setIsUploading(true);
+
+    try {
+      for (const image of selectedImages) {
+        if (!image.file) continue;
+
+        const formData = new FormData();
+        formData.append("image", image.file);
+        formData.append("title", image.file.name);
+
+      const res =   await galleryAPI.UploadImage(formData);
+      if(res.status){
+        toast.success("Images uploaded successfully!");
+        onImageSelect([]); 
+        setImages([]); 
+       }
+      }
+    } catch (error) {
+      toast.error("Error uploading images:")
+      console.error("Error uploading images:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -53,20 +89,23 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({ onImageSelect,
             <div
               key={index}
               className={clsx(
-                'relative border-2 rounded-lg cursor-pointer transition-all duration-200',
-                selectedImages.includes(img)
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                "relative aspect-square overflow-hidden rounded-lg cursor-pointer transition-all duration-200",
+                "border-2",
+                selectedImages.some((selectedImg) => selectedImg.url === img.url)
+                  ? "border-blue-500"
+                  : "border-gray-200 hover:border-gray-300"
               )}
               onClick={() => handleImageSelect(img)}
             >
               <img
-                src={img.url}
+                src={img.url || "/placeholder.svg"}
                 alt="Upload preview"
-                className="w-full aspect-square object-cover rounded-lg"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute top-2 right-2">
-                {selectedImages.includes(img) ? (
+              <div className="absolute top-2 right-2 bg-white bg-opacity-75 rounded-full p-1">
+                {selectedImages.some(
+                  (selectedImg) => selectedImg.url === img.url
+                ) ? (
                   <Check className="w-5 h-5 text-blue-500" />
                 ) : (
                   <Square className="w-5 h-5 text-gray-400" />
@@ -76,6 +115,19 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({ onImageSelect,
           ))}
         </div>
       </div>
+
+      {selectedImages.length > 0 && (
+        <div className="p-4 lg:p-6 border-t flex justify-end">
+          <button
+            onClick={handleUploadImages}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-900 disabled:bg-gray-400"
+            disabled={isUploading}
+          >
+            {isUploading ? "Uploading..." : "Save & Upload"}
+            <Upload className="w-5 h-5" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

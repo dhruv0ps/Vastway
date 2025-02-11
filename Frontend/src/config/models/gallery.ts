@@ -6,7 +6,8 @@ export interface ImageFile {
   dimensions?: string;
   title?: string;     
   caption?: string;   
-  altText?: string;    
+  altText?: string;   
+  _id?:string; 
 }
 
   export interface ImageDetails {
