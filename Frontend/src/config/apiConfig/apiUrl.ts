@@ -8,5 +8,6 @@ export const apiUrl = {
     NocCode : `${base}/noccode`,
     LeadCategories : `${base}/lead-categories`,
     Lead :`${base}/leads`,
-    canadian : `${base}/canadian`
+    canadian : `${base}/canadian`,
+    crs : `${base}/crs-score`,
 }

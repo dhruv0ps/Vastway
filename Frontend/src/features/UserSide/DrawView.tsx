@@ -1,11 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { drawrAPi } from "../../config/apiRoutes/drawroutes";
-import { Card, TextInput, Button, Label,Spinner } from "flowbite-react";
+import { Card, TextInput, Button, Label, Spinner } from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
-import ColorThief from "color-thief-browser";
 import { DrawList } from "../../config/models/draw";
-
+import { FastAverageColor } from "fast-average-color"; 
 
 const categoryColors: { [key: string]: string } = {
   "Alberta PNP": "#D1E3FF",
@@ -19,76 +18,74 @@ export default function CanadianDraws() {
   const [filteredDraws, setFilteredDraws] = useState<DrawList[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const imgRefs = useRef<{ [key: string]: HTMLImageElement | null }>({});
-  const [_borderColors, setBorderColors] = useState<{ [key: string]: string }>({});
+  const [borderColors, setBorderColors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
+  
+
   useEffect(() => {
     const fetchDraws = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const response = await drawrAPi.GetDraw();
         setDraws(response.data);
         setFilteredDraws(response.data);
-        
       } catch (error) {
         console.error("Error fetching draws:", error);
       }
-      setLoading(false)
+      setLoading(false);
     };
     fetchDraws();
   }, []);
 
   useEffect(() => {
-    const results = draws.filter((draw) =>
-      draw.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (activeCategory === "All" || draw.category.name === activeCategory)
+    const results = draws.filter(
+      (draw) =>
+        draw.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (activeCategory === "All" || draw.category.name === activeCategory)
     );
     setFilteredDraws(results);
   }, [searchTerm, activeCategory, draws]);
 
   useEffect(() => {
-    Object.keys(imgRefs.current).forEach((id) => {
-      const imgElement = imgRefs.current[id];
-      if (imgElement && imgElement.complete) {
-        extractColor(id, imgElement);
-      }
+    const fac = new FastAverageColor();
+    filteredDraws.forEach((draw) => {
+      const img = new Image();
+    
+      img.crossOrigin = "Anonymous";
+      img.src = draw.imageUrl || draw.image;
+      
+      img.onload = () => {
+        const color = fac.getColor(img);
+        setBorderColors((prev) => ({
+          ...prev,
+          [draw.id]: color.hex, 
+        }));
+      };
     });
   }, [filteredDraws]);
 
-  const extractColor = (id: string, imgElement: HTMLImageElement) => {
-    const colorThief = new ColorThief();
-    try {
-      const color = colorThief.getColor(imgElement);
-      setBorderColors((prev) => ({
-        ...prev,
-        [id]: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-      }));
-    } catch (error) {
-      console.error("Error extracting color:", error);
-    }
-  };
-
   const categories = ["All", ...new Set(draws.map((draw) => draw.category.name))];
- if (loading) {
-      return (
-        <section className="py-10 font-['Lexend',sans-serif] max-w-[1200px] mx-auto">
-          <div className="container mx-auto px-4 min-h-[400px] flex items-center justify-center">
-            <Spinner size="xl"  />
-          </div>
-        </section>
-      );
-    }
-  
+
+  if (loading) {
+    return (
+      <section className="py-10 font-['Lexend',sans-serif] max-w-[1200px] mx-auto">
+        <div className="container mx-auto px-4 min-h-[400px] flex items-center justify-center">
+          <Spinner size="xl" />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    
-      <header className="max-w-5xl mx-auto text-center mb-12">
+      <header className="max-w-6xl mx-auto text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Canadian Draws</h1>
-        <p className="text-xl text-gray-600">Explore the latest immigration opportunities in Canada</p>
+        <p className="text-xl text-gray-600">
+          Explore the latest immigration opportunities in Canada
+        </p>
       </header>
 
-      <main className="max-w-5xl mx-auto">
-       
+      <main className="max-w-6xl mx-auto">
         <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="w-full sm:w-auto">
             <TextInput
@@ -113,24 +110,25 @@ export default function CanadianDraws() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredDraws.map((item) => (
             <Link to={`/view/${item.linkEdit}`} key={item.id}>
               <Card
-                className="h-full hover:shadow-lg transition-shadow cursor-pointer rounded-lg"
+                className="max-w-sm h-full hover:shadow-lg transition-shadow duration-300"
                 style={{
-                  borderColor: categoryColors[item.category.name] || "#ddd",
-                  borderRadius:"2px", borderTopStyle:"solid", borderWidth:"2px"
+                  borderColor: borderColors[item.id] || categoryColors[item.category.name] || "#ddd",
+                  borderRadius: "2px",
+                  borderTopStyle: "solid",
+                  borderWidth: "2px",
                 }}
               >
                 <div className="relative h-48 overflow-hidden rounded-t-lg">
                   {item.image || item.imageUrl ? (
                     <img
-                      // ref={(el) => (imgRefs.current[item.id] = el)}
+                    
                       src={item.imageUrl || item.image}
                       alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover "
-                      // onLoad={() => extractColor(item.id, imgRefs.current[item.id]!)}
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full bg-gray-100">
@@ -152,7 +150,6 @@ export default function CanadianDraws() {
                   <div className="flex items-center text-gray-500 mb-1 mt-2">
                     <p>{new Date(item.drawDate).toLocaleDateString()}</p>
                   </div>
-                  
                 </div>
               </Card>
             </Link>

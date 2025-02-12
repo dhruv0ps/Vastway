@@ -25,7 +25,9 @@ const drawService = {
       .populate("category")
       .populate("subCategories")
       .populate("nocCodes")
-      .populate("previousDraw", "title drawDate");
+      .populate("previousDraw", "title drawDate")
+      .sort({ createdAt: -1 });
+      
   },
 
   async getDrawById(id) {

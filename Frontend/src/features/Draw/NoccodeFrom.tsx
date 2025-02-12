@@ -26,7 +26,7 @@ const NocCodeForm: React.FC = () => {
   const fetchNocCode = async (nocId: string) => {
     try {
       const response = await nocCodeAPI.GetNocCodeById(nocId);
-      setNocData(response.data.data);
+      setNocData(response.data);
     } catch (error) {
       toast.error("Error fetching NOC Code");
     } finally {

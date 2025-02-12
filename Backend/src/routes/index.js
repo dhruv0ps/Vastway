@@ -9,6 +9,7 @@ const galleryController = require("../controllers/galleryController")
 const NocCodeController = require("../controllers/nocController")
 const LeadController = require("../controllers/leadController");
 const {fileUpload} = require("../config/multerConfig");
+const crsCalculator = require("../controllers/crsCalculator")
 var jsonParser = bodyParser.json()
 router.use(jsonParser)
 router.post("/categories", categoryController.addCategory);
@@ -53,5 +54,7 @@ router.get("/lead-categories/:id", LeadController.getLeadCategoryById);
 router.put("/lead-categories/:id", LeadController.updateLeadCategory);
 router.delete("/lead-categories/:id", LeadController.deleteLeadCategory);
 
+
+router.post("/crs-score",crsCalculator.calculateCRS)
 
 module.exports = router

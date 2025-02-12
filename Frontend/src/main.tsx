@@ -28,7 +28,8 @@ import LeadCategoryList from './features/Leads/LeadCategoryList.tsx';
 import LeadForm from './features/Leads/leadfrom.tsx';
 import LeadList from './features/Leads/LeadList.tsx';
 import HomePage from './features/UserSide/Homepage.tsx';
-
+// import Crscalculator from './features/UserSide/Home/CRS calculator/Crscalculator.tsx';
+import Crscalculator from './features/UserSide/Home/CRS calculator/crscalculator.tsx'
 const stores = { authStore };
 const router = createBrowserRouter([
   {
@@ -108,7 +109,11 @@ const router = createBrowserRouter([
       {
         path:"/view/list",
         element:<CanindianDraws/>
+      },{
+        path:"/crscalculator",
+        element : <Crscalculator/>
       }
+
     ]
     }
   

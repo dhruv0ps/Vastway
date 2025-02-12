@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; 
 import { Link as LucideLink } from "lucide-react";
 import Features from "./Features";
+import { NewsCard } from "./Home/NewsCard";
+import FeaturesPage from "./Home/NewFeature";
+import StoryPage from "./Home/StoryPage";
 function HomePage() {
   const [email, setEmail] = useState("");
   const [index, setIndex] = useState(0);
@@ -28,7 +31,7 @@ function HomePage() {
     { title: "Ways To PR", path: "/ways-to-pr", color: "bg-red-400 hover:bg-salmon-400" },
     { title: "Program Details", path: "/program-details", color: "bg-teal-300 hover:bg-teal-400" },
     { title: "Processing Time", path: "/processing-time", color: "bg-pink-300 hover:bg-pink-400" },
-    { title: "Points Calculator", path: "/points-calculator", color: "bg-gray-300 hover:bg-gray-400" },
+    { title: "Points Calculator", path: "/crscalculator", color: "bg-gray-300 hover:bg-gray-400" },
     { title: "NOC Finder", path: "/noc-finder", color: "bg-emerald-300 hover:bg-emerald-400" }
   ];
 
@@ -113,7 +116,15 @@ function HomePage() {
           </div>
         </div>
       </div>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div>
+        <NewsCard/>
+      </div>
+      </main>
       <Features/>
+      <FeaturesPage/>
+      <div> <StoryPage/></div>
+     
     </div>
   );
 }
