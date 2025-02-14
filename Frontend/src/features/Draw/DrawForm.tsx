@@ -66,7 +66,7 @@ const DrawForm = () => {
           crsCutoff: draw.crsCutoff || "",
           score: draw.score || "",
           rankRequired: draw.rankRequired || "",
-          tieBreakingRule: draw.tieBreakingRule || "",
+          tieBreakingRule: draw.tieBreakingRule ? new Date(draw.tieBreakingRule).toISOString().slice(0,16) : "",
           additionalInfo: draw.additionalInfo || "",
           image:draw.image || "",
           imageCaption: draw.imageCaption || "",
@@ -179,7 +179,7 @@ const DrawForm = () => {
     formDataToSend.append("crsCutoff", formData.crsCutoff);
     formDataToSend.append("score", formData.score);
     formDataToSend.append("rankRequired", formData.rankRequired);
-    formDataToSend.append("tieBreakingRule", formData.tieBreakingRule);
+    formDataToSend.append("tieBreakingRule",  new Date(formData.tieBreakingRule).toISOString());
     formDataToSend.append("additionalInfo", formData.additionalInfo);
     formDataToSend.append("imageCaption", formData.imageCaption);
     formDataToSend.append("metaTitle", formData.metaTitle);
@@ -337,7 +337,7 @@ const DrawForm = () => {
        
         <div>
           <Label htmlFor="tieBreakingRule" value="Tie Breaking Rule" />
-          <TextInput id="tieBreakingRule" type="text"  placeholder="Tie Breaking Rule" value={formData.tieBreakingRule} onChange={(e) => setFormData({ ...formData, tieBreakingRule: e.target.value })} required />
+          <input id="tieBreakingRule" type="datetime-local"  className="w-full" value={formData.tieBreakingRule} onChange={(e) => setFormData({ ...formData, tieBreakingRule: e.target.value })} required />
         </div>
 
      

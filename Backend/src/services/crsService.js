@@ -1,4 +1,4 @@
-
+//#region // exam proficincy
 const ieltsToCLB = (score, type) => {     
     const mapping = {         
         listening: { "9.0": 10, "8.5": 10, "8.0": 9, "7.5": 8, "7.0": 7, "6.0": 6, "5.0": 5, "4.5": 4 },         
@@ -36,31 +36,28 @@ const ieltsToCLB = (score, type) => {
         listening: [
             { min: 89, max: 90, clb: 10 }, { min: 82, max: 88, clb: 9 }, { min: 71, max: 81, clb: 8 },
             { min: 60, max: 70, clb: 7 }, { min: 50, max: 59, clb: 6 }, { min: 39, max: 49, clb: 5 },
-            { min: 28, max: 38, clb: 4 }, { min: 18, max: 27, clb: 3 }
+            { min: 28, max: 38, clb: 4 }, { min: 0, max: 27, clb: 3 }
         ],
         reading: [
             { min: 88, max: 90, clb: 10 }, { min: 78, max: 87, clb: 9 }, { min: 69, max: 77, clb: 8 },
             { min: 60, max: 68, clb: 7 }, { min: 51, max: 59, clb: 6 }, { min: 42, max: 50, clb: 5 },
-            { min: 33, max: 41, clb: 4 }, { min: 24, max: 32, clb: 3 }
+            { min: 33, max: 41, clb: 4 }, { min: 0, max: 32, clb: 3 }
         ],
         speaking: [
             { min: 89, max: 90, clb: 10 }, { min: 84, max: 88, clb: 9 }, { min: 76, max: 83, clb: 8 },
             { min: 68, max: 75, clb: 7 }, { min: 59, max: 67, clb: 6 }, { min: 51, max: 58, clb: 5 },
-            { min: 42, max: 50, clb: 4 }, { min: 34, max: 41, clb: 3 }
+            { min: 42, max: 50, clb: 4 }, { min: 0, max: 41, clb: 3 }
         ],
         writing: [
-            { min: 89, max: 90, clb: 10 }, { min: 88, max: 88, clb: 9 }, { min: 79, max: 87, clb: 8 },
+            { min: 90, max: 90, clb: 10 }, { min: 88, max: 89, clb: 9 }, { min: 79, max: 87, clb: 8 },
             { min: 69, max: 78, clb: 7 }, { min: 60, max: 68, clb: 6 }, { min: 51, max: 59, clb: 5 },
-            { min: 41, max: 50, clb: 4 }, { min: 32, max: 40, clb: 3 }
+            { min: 41, max: 50, clb: 4 }, { min: 0, max: 40, clb: 3 }
         ]
     };
 
     const clb = mapping[type].find(range =>
         minScore >= range.min && maxScore <= range.max
     )?.clb || 0;
-
-    console.log(`✅ PTE ${type}: Score ${score} → CLB: ${clb}`);
-
     return clb;
 };
 
@@ -240,6 +237,7 @@ const convertSpouseLanguageToCLB = (spouselanguageTest, spouseLanguageScores) =>
 
     return clbScores;
 };
+ //#region//French bonus calculate
 const calculateFrenchBonus = (firstLanguageTest, firstClbScores, secondLanguageTest, secondClbScores) => {
     let bonusPoints = 0;
     const normalizedFirstTest = firstLanguageTest?.toUpperCase();
@@ -269,14 +267,12 @@ const calculateFrenchBonus = (firstLanguageTest, firstClbScores, secondLanguageT
             ["speaking", "listening", "reading", "writing"].every(skill => secondClbScores[skill] >= 5)
         ) {
             bonusPoints = 50;
-            console.log(" Awarded 50 bonus points for French CLB 7+ with English CLB 5+");
         } 
         else if (
             isEnglishFirst && isFrenchSecond &&
             ["speaking", "listening", "reading", "writing"].every(skill => firstClbScores[skill] >= 5)
         ) {
             bonusPoints = 50;
-            console.log(" Awarded 50 bonus points for English CLB 5+ with French CLB 7+");
         }
         else if (
             isEnglishFirst && isFrenchSecond &&
@@ -292,10 +288,12 @@ const calculateFrenchBonus = (firstLanguageTest, firstClbScores, secondLanguageT
 
 const calculateCRS = ({maritalStatus, age, educationLevel, languageScores, languageTest, secondlanguageTest, 
     secondlanguageScores,canadianExperience, foreignExperience,hasSiblingInCanada,hasJobOffer
-    ,nocTeer,canadianEducationLevel,hasNomination, hasQualification,spouseeducationLevel, spouseLanguageScores, spouseCanadianExperience, spouselanguageTest
+    ,nocTeer,canadianEducationLevel,hasNomination, hasQualification,spouseeducationLevel, spouseLanguageScores, spouseCanadianExperience, spouselanguageTest,
+    spouseAccompanying,
+
 
 }) => {
-    const hasSpouse = maritalStatus === "married" || maritalStatus === "common_law";
+    const hasSpouse = (maritalStatus === "married" || maritalStatus === "common_law") && spouseAccompanying === true;
 
     let clbScores = {};
     if (languageTest === "IELTS") {
@@ -311,12 +309,10 @@ const calculateCRS = ({maritalStatus, age, educationLevel, languageScores, langu
             Object.keys(languageScores).map(k => [k, celpipToCLB(languageScores[k])])
         );
     } if (languageTest === "TCF_Canada") {
-        console.log("TCF Selected - Original Language Scores:", languageScores);
         clbScores = Object.fromEntries(
             Object.keys(languageScores).map(k => [k, tcfToCLB(languageScores[k], k)])
         );
     } else if (languageTest === "TEF_Canada") {
-        console.log("TEF Canada Selected - Original Language Scores:", languageScores);
         clbScores = Object.fromEntries(
             Object.keys(languageScores).map(k => [k, tefToCLB(languageScores[k], k)])
         );
@@ -337,26 +333,34 @@ const calculateCRS = ({maritalStatus, age, educationLevel, languageScores, langu
     const isCLB5Plus = ["speaking", "listening", "reading", "writing"].every(skill => clbScores[skill] >= 5);
 
     const educationSkillFactor = {
-        "5": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
+        "5": isCLB9Plus ? 0 : isCLB7Plus ? 0 : 0,
         "15": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
         "30": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
         "50": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
         "60": isCLB9Plus ? 50 : isCLB7Plus ? 25 : 0,
         "70": isCLB9Plus ? 50 : isCLB7Plus ? 25 : 0,
         "80": isCLB9Plus ? 50 : isCLB7Plus ? 25 : 0
-    };
+    };  
     const educationSkillBonus = educationSkillFactor[educationLevel] || 0;
     const educationCanadianExperienceFactor = {
-        "5": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 25 : 13,
-        "15": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 25 : 13,
-        "30": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 25 : 13,
-        "50": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 25 : 13,
-        "60": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 50 : 25,
-        "70": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 50 : 25,
-        "80": canadianExperience === "two_years" || canadianExperience === "three_years" || canadianExperience === "four_years" || canadianExperience === "five_plus_years" ? 50 : 25
-    };
-    
-    const educationCanadianExperienceBonus = educationCanadianExperienceFactor[educationLevel] || 0;
+        "0": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 0 : 0),
+      
+        "5": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 0 : 0),
+      
+        "15": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 25 : 13),
+      
+        "30": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 25 : 13),
+      
+        "50": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 25 : 13),
+      
+        "60": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 50 : 25),
+      
+        "70": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 50 : 25),
+      
+        "80": canadianExperience === "none" ? 0 : (["two_years", "three_years", "four_years", "five_plus_years"].includes(canadianExperience) ? 50 : 25)
+      };
+      const educationCanadianExperienceBonus = educationCanadianExperienceFactor[educationLevel] || 0;
+      
     const foreignWorkSkillFactor = {
         "one_year": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
         "two_years": isCLB9Plus ? 25 : isCLB7Plus ? 13 : 0,
@@ -372,7 +376,6 @@ const calculateCRS = ({maritalStatus, age, educationLevel, languageScores, langu
     let qualificationBonus = 0;
     if (hasQualification) {
         qualificationBonus = isCLB7Plus ? 50 : isCLB5Plus ? 25 : 0;
-        console.log(`✅ Certificate of Qualification Bonus: ${qualificationBonus}`);
     }
     let jobOfferPoints = 0;
     if (hasJobOffer && nocTeer) {

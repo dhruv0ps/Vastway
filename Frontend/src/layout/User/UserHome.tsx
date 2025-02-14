@@ -14,7 +14,7 @@ const UserHome = observer(() => {
                     <Outlet />
                 </div>
             </main>
-            <div className="mt-12">
+            <div >
         <Footer />
       </div>
         </div>

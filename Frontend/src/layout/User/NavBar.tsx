@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
 
 const NavLinks: React.FC = () => (
   <>
-    <Link to="/draws" className="text-primary hover:underline">
+    <Link to="/view/list" className="text-primary hover:underline">
       Draws
     </Link>
     <Link to="/blogs" className="text-primary hover:underline">

@@ -1,9 +1,12 @@
 import { Category } from "./category";
 
 export interface NocCode {
-    code: string;
-    title: string;
-  }
+  _id: string;
+  tier: string;
+  nocCode: string;
+  classTitle: string;
+}
+
   
   export interface subCategory {
     id: string;
@@ -29,9 +32,10 @@ export interface NocCode {
     metaDescription: string;
     linkEdit: string;
     imageUrl?: File | null;
+    _id:string
   }
   export interface DrawList {
-    id: string;
+    _id: string;
     title: string;
     image: string;
     imageUrl: string;

@@ -4,14 +4,9 @@ import { drawrAPi } from "../../config/apiRoutes/drawroutes";
 import { Card, TextInput, Button, Label, Spinner } from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
 import { DrawList } from "../../config/models/draw";
-import { FastAverageColor } from "fast-average-color"; 
+import { FastAverageColor } from "fast-average-color";
 
-const categoryColors: { [key: string]: string } = {
-  "Alberta PNP": "#D1E3FF",
-  "Manitoba PNP": "#F5E1A4",
-  "Ontario PNP": "#FFD1DC",
-  "BC PNP": "#D1FFD1",
-};
+
 
 export default function CanadianDraws() {
   const [draws, setDraws] = useState<DrawList[]>([]);
@@ -20,7 +15,6 @@ export default function CanadianDraws() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [borderColors, setBorderColors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
-  
 
   useEffect(() => {
     const fetchDraws = async () => {
@@ -48,21 +42,55 @@ export default function CanadianDraws() {
 
   useEffect(() => {
     const fac = new FastAverageColor();
-    filteredDraws.forEach((draw) => {
-      const img = new Image();
-    
-      img.crossOrigin = "Anonymous";
-      img.src = draw.imageUrl || draw.image;
-      
-      img.onload = () => {
-        const color = fac.getColor(img);
-        setBorderColors((prev) => ({
-          ...prev,
-          [draw.id]: color.hex, 
-        }));
-      };
-    });
+    let mounted = true;
+  
+    const updateColors = async () => {
+      const newBorderColors: { [key: string]: string } = {};
+  
+      await Promise.all(
+        filteredDraws.map((draw) => {
+          return new Promise((resolve) => {
+            if (!draw.imageUrl && !draw.image) {
+              newBorderColors[draw._id] =   "#ddd";
+              return resolve(null);
+            }
+  
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = draw.imageUrl || draw.image;
+  
+            img.onload = () => {
+              try {
+                const color = fac.getColor(img);
+                newBorderColors[draw._id] = `rgba(${color.value[0]}, ${color.value[1]}, ${color.value[2]}, ${color.value[3]})`;
+              } catch (error) {
+                newBorderColors[draw._id] =  "#ddd";
+              }
+              resolve(null);
+            };
+  
+            img.onerror = () => {
+              console.error(`Error loading image for draw ${draw._id}`);
+              newBorderColors[draw._id] =  "#ddd";
+              resolve(null);
+            };
+          });
+        })
+      );
+  
+      if (mounted) {
+        setBorderColors(newBorderColors);
+        console.log("Updated Border Colors:", newBorderColors);
+      }
+    };
+  
+    updateColors();
+  
+    return () => {
+      mounted = false;
+    };
   }, [filteredDraws]);
+  
 
   const categories = ["All", ...new Set(draws.map((draw) => draw.category.name))];
 
@@ -112,20 +140,20 @@ export default function CanadianDraws() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredDraws.map((item) => (
-            <Link to={`/view/${item.linkEdit}`} key={item.id}>
+            <Link to={`/view/${item.linkEdit}`} key={item._id}>
               <Card
                 className="max-w-sm h-full hover:shadow-lg transition-shadow duration-300"
                 style={{
-                  borderColor: borderColors[item.id] || categoryColors[item.category.name] || "#ddd",
-                  borderRadius: "2px",
-                  borderTopStyle: "solid",
-                  borderWidth: "2px",
+                  borderRight: `6px solid ${borderColors[item._id] ||  "#ddd"}`,
+                  borderBottom: `6px solid ${borderColors[item._id] ||  "#ddd"}`,
+                  borderTop:`1px solid ${borderColors[item._id] ||  "#ddd"}`,
+                  borderLeft: `1px solid ${borderColors[item._id] ||  "#ddd"}`,
+                  borderRadius: "12px",
                 }}
               >
                 <div className="relative h-48 overflow-hidden rounded-t-lg">
                   {item.image || item.imageUrl ? (
                     <img
-                    
                       src={item.imageUrl || item.image}
                       alt={item.title}
                       className="absolute inset-0 w-full h-full object-cover"
@@ -141,7 +169,7 @@ export default function CanadianDraws() {
                   <Label
                     className="inline-block px-3 py-1 mt-2 rounded-full text-sm font-semibold"
                     style={{
-                      backgroundColor: categoryColors[item.category.name] || "#ddd",
+                      backgroundColor: borderColors[item._id] || "#ddd",
                       color: "#333",
                     }}
                   >

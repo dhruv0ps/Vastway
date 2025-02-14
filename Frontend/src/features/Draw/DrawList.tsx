@@ -136,7 +136,20 @@ const DrawList: React.FC = () => {
                   <Table.Cell className="font-medium text-gray-900">{draw.title}</Table.Cell>
                   <Table.Cell>{draw.category.name}</Table.Cell>
                   <Table.Cell>{new Date(draw.drawDate).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>{draw.tieBreakingRule}</Table.Cell>
+                  <Table.Cell>
+  {draw.tieBreakingRule
+    ? new Date(draw.tieBreakingRule).toLocaleString("en-US", {
+        timeZone: "UTC",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }) + " UTC"
+    : "N/A"}
+</Table.Cell>
                   <Table.Cell>{draw.rankRequired}</Table.Cell>
                   <Table.Cell>
                     <Button color="primary" size="sm" onClick={() => handleEdit(draw._id)}className=" bg-primary text-white" >

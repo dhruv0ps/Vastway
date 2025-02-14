@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card } from "flowbite-react";
-import { MapPin } from "lucide-react";
+import { MapPin,ArrowRight } from "lucide-react";
 import { NewsItem } from "../../../config/models/news";
 import {FastAverageColor} from "fast-average-color";
 
@@ -58,7 +58,7 @@ const newsItems: NewsItem[] = [
 
 export function NewsCard() {
   const [colors, setColors] = useState<{ [key: number]: string }>({});
-
+  const[hoverId,setHoveredId] = useState<number | null>(null)
   useEffect(() => {
     const fac = new FastAverageColor();
 
@@ -81,16 +81,32 @@ export function NewsCard() {
       {newsItems.map((item) => (
         <Card
           key={item.id}
-          className="max-w-sm h-full hover:shadow-lg transition-shadow duration-300"
-          style={{ borderColor: colors[item.id] || "#ccc", borderWidth: "2px" }}
+        className="max-w-sm h-full hover:shadow-2xl transition-shadow duration-300 hover:-translate-y-1"
+        style={{
+          borderRight: `6px solid ${colors[item.id] ||  "#ddd"}`,
+          borderBottom: `6px solid ${colors[item.id] ||  "#ddd"}`,
+          borderTop:`1px solid ${colors[item.id] ||  "#ddd"}`,
+          borderLeft: `1px solid ${colors[item.id] ||  "#ddd"}`,
+          borderRadius: "12px",
+        }}
+        onMouseEnter={() => setHoveredId(item.id)}
+        onMouseLeave={() => setHoveredId(null)}
         >
-          <img
-            src={item.image}
-            alt={item.title}
-            className="h-48 w-full object-cover rounded-t-lg"
-          />
-          <div className="p-4">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="relative h-48 overflow-hidden rounded-t-lg">
+                  {item.image ?  (
+                    <img
+                      src={ item.image}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-gray-100">
+                      <span className="text-gray-400">No image available</span>
+                    </div>
+                  )}
+                </div>
+          <div className="p-2">
+            <div className="flex items-center gap-2 ">
               {item.icon === "location" && (
                 <MapPin className="w-5 h-5 text-red-500" />
               )}
@@ -98,11 +114,22 @@ export function NewsCard() {
                 {item.title}
               </h5>
             </div>
-            <p className="font-normal text-gray-700 dark:text-gray-400 mb-4">
+            <p className="font-normal text-gray-700 dark:text-gray-400 mb-2">
               {item.description}
             </p>
             <p className="text-sm text-gray-500">{item.date}</p>
           </div>
+          <button 
+                  className="flex items-center text-sm font-semibold transition-colors duration-300 ml-2"
+                  style={{ 
+                    color: hoverId === item.id ? colors[item.id] : '#6B7280',
+                  }}
+                >
+                  Read More
+                  <ArrowRight className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                    hoverId === item.id ? 'translate-x-1' : ''
+                  }`} />
+                </button>
         </Card>
       ))}
     </div>

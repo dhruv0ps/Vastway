@@ -11,7 +11,7 @@ const drawSchema = new mongoose.Schema(
   crsCutoff: { type: Number, default: null },
   score: { type: Number, default: null },
   rankRequired: { type: String, required: true },
-  tieBreakingRule: { type: String, required: true },
+  tieBreakingRule: { type: Date, required: true },
   additionalInfo: { type: String, default: "" },
   image: { type: String, default: "" }, 
   imageUrl:{type:String},

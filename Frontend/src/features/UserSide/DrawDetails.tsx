@@ -5,6 +5,7 @@ import { drawrAPi } from "../../config/apiRoutes/drawroutes";
 import { Draw } from "../../config/models/draw";
 import { Select, Table, Spinner, Alert } from "flowbite-react";
 import { useRef } from "react";
+import { FastAverageColor } from "fast-average-color";
 export default function DrawDetailsPage() {
   const { linkEdit } = useParams();
   const [DrawDetails, setDrawDetails] = useState<Draw | null>(null);
@@ -12,7 +13,7 @@ export default function DrawDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("all");
-  // const [dominantColor, setDominantColor] = useState<string>("#000"); 
+  const [dominantColor, setDominantColor] = useState<{ [key: string]: string }>({});;
 
   const imgRef = useRef<HTMLImageElement | null>(null);
   useEffect(() => {
@@ -29,22 +30,52 @@ export default function DrawDetailsPage() {
     };
     fetchDrawData();
   }, [linkEdit])
-  // const extractColor = () => {
-  //   if (imgRef.current && imgRef.current.complete) {
-  //     const imgElement = imgRef.current;
-  //     const colorThief = new ColorThief();
 
-  //     try {
-  //       const color = colorThief.getColor(imgElement);
-  //       setDominantColor(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-  //     } catch (error) {
-  //       console.error("Color Thief Error:", error);
-  //     }
-  //   }
-  // };
   useEffect(() => {
-    console.log("Image Ref after rendering:", imgRef.current);
-  }, [imgRef.current]);
+    if (!DrawDetails?.imageUrl && !DrawDetails?.image) return;
+
+    const fac = new FastAverageColor();
+    let mounted = true;
+
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+
+    const imageSrc =
+      DrawDetails.image instanceof File
+        ? URL.createObjectURL(DrawDetails.image)
+        : typeof DrawDetails.image === "string" && DrawDetails.image !== ""
+          ? DrawDetails.image
+          : typeof DrawDetails.imageUrl === "string" && DrawDetails.imageUrl !== ""
+            ? DrawDetails.imageUrl
+            : null;
+
+    if (!imageSrc) return;
+
+    img.src = imageSrc;
+
+    img.onload = () => {
+      if (!mounted) return;
+
+      try {
+        const color = fac.getColor(img);
+        setDominantColor((prev) => ({
+          ...prev,
+          [DrawDetails._id]: `rgba(${color.value[0]}, ${color.value[1]}, ${color.value[2]}, ${color.value[3]})`,
+        }));
+      } catch (error) {
+        console.error("Error extracting dominant color:", error);
+      }
+    };
+
+    img.onerror = () => {
+      console.error(`Error loading image for draw ${DrawDetails._id}`);
+    };
+
+    return () => {
+      mounted = false;
+    };
+  }, [DrawDetails]);
+
   const filteredDraws = selectedSubCategory === "all"
     ? relatedDraws
     : relatedDraws.filter(draw =>
@@ -140,7 +171,8 @@ export default function DrawDetailsPage() {
             <div className="flex flex-col items-center justify-center">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full lg:w-[75%]">
                 {DrawDetails?.invitationsIssued && (
-                  <div className="flex flex-col items-center justify-center border border-black shadow-md p-4"
+                  <div className="flex flex-col items-center justify-center shadow-md p-4"
+                    style={{ border: `2px solid ${dominantColor[DrawDetails._id] || "#000"}` }}
                   >
                     <div className="text-[1em] font-normal mb-1">Invitation Issued</div>
                     <div className="text-[1.1em] font-medium">{DrawDetails.invitationsIssued}</div>
@@ -148,7 +180,8 @@ export default function DrawDetailsPage() {
                 )}
 
                 {DrawDetails?.drawDate && (
-                  <div className="flex flex-col items-center justify-center border border-black shadow-md p-4">
+                  <div className="flex flex-col items-center justify-center border  shadow-md p-4"
+                    style={{ border: `2px solid ${dominantColor[DrawDetails._id] || "#000"}` }}>
                     <div className="text-[1.0em] font-normal mb-1">Draw Date</div>
                     <div className="text-[1.1em] font-medium">
                       {new Date(DrawDetails.drawDate).toLocaleDateString("en-US", {
@@ -161,7 +194,8 @@ export default function DrawDetailsPage() {
                 )}
 
                 {DrawDetails?.crsCutoff && (
-                  <div className="flex flex-col items-center justify-center border border-black shadow-md p-4">
+                  <div className="flex flex-col items-center justify-center  shadow-md p-4"
+                    style={{ border: `2px solid ${dominantColor[DrawDetails._id] || "#000"}` }}>
                     <div className="text-[1.0em] font-normal mb-1">CRS Cutoff</div>
                     <div className="text-[1.1em] font-medium">{DrawDetails.crsCutoff}</div>
                   </div>
@@ -169,24 +203,31 @@ export default function DrawDetailsPage() {
               </div>
 
 
-              <div className="flex flex-col md:flex-row items-center justify-center border border-black shadow-[4px_4px_20px_rgba(0,0,0,0.2)] p-4 w-full lg:w-[59%] mt-5">
-                <div className="text-[1.0em] font-normal md:mr-2">
-                  {typeof DrawDetails?.category === "object" && "name" in DrawDetails.category
-                    ? DrawDetails.category.name
-                    : typeof DrawDetails?.category === "string"
-                      ? DrawDetails.category
-                      : "Category Not Available"} -
+              {DrawDetails && (
+                <div
+                  className="flex flex-col md:flex-row items-center justify-center shadow-[4px_4px_20px_rgba(0,0,0,0.2)] p-4 w-full lg:w-[59%] mt-5"
+                  style={{ border: `2px solid ${dominantColor[DrawDetails?._id] || "#000"}` }}
+                >
+                  <div className="text-[1.0em] font-normal md:mr-2">
+                    {typeof DrawDetails?.category === "object" && "name" in DrawDetails.category
+                      ? DrawDetails.category.name
+                      : typeof DrawDetails?.category === "string"
+                        ? DrawDetails.category
+                        : "Category Not Available"} -
+                  </div>
+                  <div className="text-[1.1em] font-medium">
+                    {Array.isArray(DrawDetails?.subCategories) && DrawDetails.subCategories.length > 0
+                      ? DrawDetails.subCategories.map((sub) => (typeof sub === "string" ? sub : sub.name)).join(", ")
+                      : "No Subcategory"}
+                  </div>
                 </div>
-                <div className="text-[1.1em] font-medium">
-                  {Array.isArray(DrawDetails?.subCategories) && DrawDetails.subCategories.length > 0
-                    ? DrawDetails.subCategories.map((sub) => (typeof sub === "string" ? sub : sub.name)).join(", ")
-                    : "No Subcategory"}
-                </div>
-              </div>
+              )}
 
-              {/* Rank Required */}
+
+
               {DrawDetails?.rankRequired && (
-                <div className="flex flex-col md:flex-row items-center justify-center border border-black shadow-md p-4 w-full lg:w-[59%] mt-5">
+                <div className="flex flex-col md:flex-row items-center justify-center  shadow-md p-4 w-full lg:w-[59%] mt-5"
+                  style={{ border: `2px solid ${dominantColor[DrawDetails._id] || "#000"}` }}>
                   <div className="text-[1.0em] font-normal md:mr-2">Rank Required to be invited to apply -</div>
                   <div className="text-[1.1em] font-medium">{DrawDetails.rankRequired}</div>
                 </div>
@@ -194,27 +235,50 @@ export default function DrawDetailsPage() {
 
               {/* Tie Breaking Rule */}
               {DrawDetails?.tieBreakingRule && (
-                <div className="flex flex-row items-center justify-center border border-black shadow-md p-4 w-full lg:w-[59%] mt-5 whitespace-nowrap overflow-hidden text-ellipsis">
+                <div className="flex flex-row items-center justify-center border border-black shadow-md p-4 w-full lg:w-[59%] mt-5 whitespace-nowrap overflow-hidden text-ellipsis"
+                  style={{ border: `2px solid ${dominantColor[DrawDetails._id] || "#000"}` }}>
                   <div className="text-[1.0em] font-normal md:mr-2">Tie Breaking Rule -</div>
                   <div className="text-[1.0em] font-medium overflow-hidden text-ellipsis">
-                    {DrawDetails.tieBreakingRule}
+                    {new Date(DrawDetails.tieBreakingRule).toLocaleString("en-US", {
+                      timeZone: "UTC",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      hour12: false,
+                    }) + " UTC"}
                   </div>
                 </div>
               )}
             </div>
+            {DrawDetails?.nocCodes && Array.isArray(DrawDetails.nocCodes) && DrawDetails.nocCodes.length > 0 && (
+              <section className="mt-10">
+                <h2 className="mb-4 text-2xl font-bold mt-2">Targeted Trade Occupations</h2>
+                <ul className="list-disc list-inside text-lg text-gray-700">
+                  {DrawDetails.nocCodes.map((noc, index) => (
+                    <li key={index} className="mb-1">
+                      <span className="font-bold">{noc.nocCode}</span>: {noc.classTitle}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-            <div className="mt-5 text-[17px]">
+
+            <div className="mt-2 text-[17px]">
               <p>
                 If you receive an invitation to apply, you'll be given a <strong>60 days</strong> window to submit your
                 application.
               </p>
             </div>
 
-            <section className="mt-16">
+            <section className="mt-5">
               <h2 className="mb-6 text-2xl font-bold">Previous Draws</h2>
               <div className="mb-4">
                 <Select value={selectedSubCategory} onChange={(e) => setSelectedSubCategory(e.target.value)}>
-                  <option value="all">{filteredDraws.some((draw) => draw.category.name === "Express Entry" || "Expert") ?"All SubCategories" : "All Categories"}</option>
+                  <option value="all">{filteredDraws.some((draw) => draw.category.name === "Express Entry" || "Expert") ? "All SubCategories" : "All Categories"}</option>
                   {Array.from(new Set(relatedDraws.flatMap(draw => draw.subCategories.map(sub => (typeof sub === "string" ? sub : sub.name)))))
                     .map((subName, index) => (
                       <option key={index} value={subName}>{subName}</option>

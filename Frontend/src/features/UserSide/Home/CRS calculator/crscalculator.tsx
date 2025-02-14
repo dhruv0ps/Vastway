@@ -4,6 +4,7 @@ import LanguageComponent from './Langaugecomponent';
 import { MaritalStatus, LanguageScores, WorkExperience, EducationLevel, NocTeer, CRSScores } from '../../../../config/models/crs';
 import { crsApi } from '../../../../config/apiRoutes/crsRoutes';
 import Score from './score';
+import AgeDropdown from '../../../../util/AgeDropDown';
 
 
 const Crscalculator: React.FC = () => {
@@ -64,7 +65,7 @@ const Crscalculator: React.FC = () => {
       secondlanguageTest,
       secondlanguageScores, canadianExperience, foreignExperience,
       hasCanadianDegree,
-      canadianEducationLevel,
+      canadianEducationLevel,spouseAccompanying,
       hasSiblingInCanada, hasJobOffer, nocTeer, hasNomination, hasQualification,spouseCanadianExperience,spouseLanguageScores,spouseeducationLevel,spouselanguageTest
     }
     const response = await crsApi.calculateCRS(requestBody)
@@ -180,29 +181,11 @@ const Crscalculator: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     How old are you?
                   </label>
-                  <div className="  max-h-[10px] overflow-y-auto">
-                    <select
-                      value={age}
-                      onChange={(e) => setAge(Number(e.target.value))}
-                      className="w-full p-2 border-none outline-none"
-                    >
-                      <option value="" disabled>Select your age</option>
-                      <option value="17">17 years of age or less</option>
-                      {[...Array(28)].map((_, i) => (
-                        <option key={i + 18} value={i + 18}>
-                          {i + 18} years of age
-                        </option>
-                      ))}
-                      <option value="45">45 years of age or more</option>
-                    </select>
-                  </div>
+                  
+                  <AgeDropdown value={age} onChange={setAge}/> 
                 </div>
 
 
-
-
-
-                {/* Education Level - Show only if they have Canadian education */}
 
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -267,10 +250,10 @@ const Crscalculator: React.FC = () => {
                       onChange={(e) => setCanadianEducationLevel(e.target.value as EducationLevel)}
                       className="w-full p-2 border border-gray-300 rounded-md"
                     >
-                      <option value="">Select Canadian education level</option>
-                      <option value="0">None, or less than secondary (high school)</option>
-                      <option value="5">Secondary diploma (high school graduation)</option>
-                      <option value="15">One-year program at a university, college, trade or technical school, or other institute</option>
+                      <option value="">Select</option>
+                      <option value="0">Second (high school) or less</option>
+                      <option value="5">One-or-two-year diploma or certificate</option>
+                      <option value="15">Degree,diploma or certificate of three years or longer OR a Master's,professional or doctoral degree of at least one acedemic year </option>
                     </select>
                   </div>
                 )}
@@ -531,7 +514,7 @@ const Crscalculator: React.FC = () => {
                           name="siblingCanada"
                           checked={hasSiblingInCanada === false}
                           onChange={() => setHasSiblingInCanada(false)}
-                          className="form-radio text-red-600"
+                          className="form-radio text-primary"
                         />
                         <span className="ml-2">No</span>
                       </label>
