@@ -152,18 +152,17 @@ export default function CanadianDraws() {
             <Button
               className="bg-white text-primary border border-black rounded-md "
               size="md"
-              as={Link}
-              to="/news"
+           
             >
               News
             </Button>
-            <Button className="bg-white text-primary border border-black rounded-md" size="md" as={Link} to="/draw">
+            <Button className="bg-white text-primary border border-black rounded-md" size="md">
               Draw
             </Button>
-            <Button className="bg-white text-primary border border-black rounded-md" size="md" as={Link} to="/draw-tracker">
+            <Button className="bg-white text-primary border border-black rounded-md" size="md">
               Draw Tracker
             </Button>
-            <Button className="bg-white text-primary border border-black rounded-md" size="md" as={Link} to="/ways-to-pr">
+            <Button className="bg-white text-primary border border-black rounded-md" size="md" >
               Ways To PR
             </Button>
           </div>
