@@ -278,17 +278,37 @@ export default function DrawDetailsPage() {
               <h2 className="mb-6 text-2xl font-bold">Previous Draws</h2>
               <div className="mb-4">
                 <Select value={selectedSubCategory} onChange={(e) => setSelectedSubCategory(e.target.value)}>
-                  <option value="all">{filteredDraws.some((draw) => draw.category.name === "Express Entry" || "Expert") ? "All SubCategories" : "All Categories"}</option>
-                  {Array.from(new Set(relatedDraws.flatMap(draw => draw.subCategories.map(sub => (typeof sub === "string" ? sub : sub.name)))))
-                    .map((subName, index) => (
-                      <option key={index} value={subName}>{subName}</option>
-                    ))}
+                  <option value="all">
+                    {DrawDetails?.category &&
+                      typeof DrawDetails.category === 'object' &&
+                      DrawDetails.category.name === "Express Entry"
+                      ? "All SubCategories"
+                      : "All Categories"}
+                  </option>
+                  {Array.from(
+                    new Set(
+                      relatedDraws.flatMap((draw) =>
+                        Array.isArray(draw.subCategories)
+                          ? draw.subCategories.map((sub) => (typeof sub === "string" ? sub : sub.name))
+                          : []
+                      )
+                    )
+                  ).map((subName, index) => (
+                    <option key={index} value={subName}>
+                      {subName}
+                    </option>
+                  ))}
                 </Select>
+
               </div>
               <div className="rounded-lg border">
                 <Table striped>
                   <Table.Head>
-                    <Table.HeadCell>Category</Table.HeadCell>
+                    <Table.HeadCell>{DrawDetails?.category &&
+                      typeof DrawDetails.category === 'object' &&
+                      DrawDetails.category.name === "Express Entry"
+                      ? " SubCategory"
+                      : " Category "}</Table.HeadCell>
                     <Table.HeadCell>Draw Date</Table.HeadCell>
                     <Table.HeadCell>Invitations (LOA)</Table.HeadCell>
                     <Table.HeadCell>Score</Table.HeadCell>
