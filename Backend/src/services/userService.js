@@ -3,7 +3,7 @@ const CryptService = require("./crypt-service")
 const cryptService = new CryptService()
 const jwt = require("jsonwebtoken")
 const Role = require("../config/models/roleModel")
-const permissionService = require('./permissionService')
+const permissionService = require('../services/PermissionService')
 
 const userServices = {
     add_user_by_email: _add_user_by_email,
@@ -33,21 +33,20 @@ async function _add_user_by_email(email, pass) {
 };
 
 async function _login_user_by_email(email, pass) {
-    let data = await User.find({ email: { $regex: new RegExp(`^${email}$`, 'i') } }).populate("role").catch(err => console.log(err))
-    let user = data[0]
-    // console.log(user)
     return new Promise(async (resolve, reject) => {
+        let data = await User.find({ email: { $regex: new RegExp(`^${email}$`, 'i') }, status: { $ne: "DELETED" } })
+        let user = data[0]
         if (!user)
             return reject("Invalid credentials.")
         const match = await cryptService.verify(pass, user.password)
-        const pms = await permissionService.getPermissionByArr(user.role.permissions)
+
         if (match) {
             const token = jwt.sign(
                 { userId: user.id, role: user.role },
                 process.env.JWT_SECRET,
                 { expiresIn: '8h' }
             );
-            return resolve({ user: { ...user._doc, role: user.role.name, permissions: pms.map(pm => pm.name) }, token })
+            return resolve({ user: { ...user._doc, role: user.role }, token })
         } else {
             return reject("Invalid credentials.")
         }

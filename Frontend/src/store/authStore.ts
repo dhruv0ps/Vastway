@@ -1,17 +1,6 @@
-import { makeAutoObservable } from 'mobx';
-
-interface User {
-    _id: string;
-    username: string;
-    email: string;
-    role: {
-        _id: string;
-        name: string;
-    };
-    permissions: string[],
-    firstname?: string;
-    lastname?: string;
-}
+import { makeAutoObservable, runInAction } from 'mobx';
+import { User } from "../config/models/user"
+import { authApis } from '../config/apiRoutes/authApi';
 
 class AuthStore {
     loading: boolean = false;
@@ -27,6 +16,7 @@ class AuthStore {
         makeAutoObservable(this);
         this.token = localStorage.getItem('token');
         this.isAuthenticated = !!this.token;
+        this.getCurrentUser()
     }
 
     setToken(token: string | null) {
@@ -39,6 +29,61 @@ class AuthStore {
         }
     }
 
+    login = async (username: string, password: string) => {
+        try {
+            const response = await authApis.postLogin({ email: username, password });
+
+            runInAction(() => {
+                this.setUser(response.data.user);
+                this.setToken(response.data.token);
+            });
+
+        } catch (error) {
+            console.error('Login failed:', error);
+            throw error;
+        }
+    }
+
+    getCurrentUser = async () => {
+        try {
+            const isAdminRoute = window.location.pathname.startsWith('/yellowadmin');
+            if (!isAdminRoute)
+                return;
+            this.setLoading(true)
+            const localtoken = localStorage.getItem('token');
+            if (!localtoken || this.user) {
+                return;
+            }
+            const response = await authApis.getCurrentUser();
+            runInAction(() => {
+                this.setUser(response.data);
+            });
+        } catch (error) {
+            console.error('Failed to get current user:', error);
+            localStorage.removeItem('token')
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000);
+        } finally {
+            this.setLoading(false)
+        }
+    }
+
+    logout = async () => {
+        try {
+            this.setLoading(true)
+        } catch (error) {
+            console.error('Logout failed:', error);
+        } finally {
+            runInAction(() => {
+                this.user = null;
+                this.setToken(null);
+                this.isAuthenticated = false;
+            });
+            localStorage.removeItem('token')
+            this.setLoading(false)
+        }
+    }
 
 }
 

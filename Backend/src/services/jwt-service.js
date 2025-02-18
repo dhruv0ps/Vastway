@@ -1,23 +1,34 @@
-const jwt = require('jsonwebtoken')
-const {promisify} = require("util")
 
-const jwt_sign = promisify(jwt.sign)
-const jwt_decode = promisify(jwt.decode)
-const jwt_verify = promisify(jwt.verify)
+const jwt = require('jsonwebtoken')
 
 class JwtService {
     generateToken(data)
     {
-        return jwt_sign(JSON.stringify(data), "secret key")
+        return new Promise((resolve,reject) => {
+            jwt.sign(data,process.env.JWT_SECRET,{expiresIn : 60},(err,token) => {
+                if(err) return reject(err);
+                resolve(token);
+                console.log(token);
+            })
+        })
     }
-    verifyToken(token)
-    {
-        return jwt_verify(token, "secret key")
-    }
-    decodeToken(token)
-    {
-        return jwt_decode(token)
-    }
+    verifyToken(token) {
+        return new Promise((resolve, reject) => {
+          jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) return reject(err);
+            resolve(decoded);
+          });
+        });
+      }
+    
+      verifyToken(token) {
+        return new Promise((resolve, reject) => {
+          jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) return reject(err);
+            resolve(decoded);
+          });
+        });
+      }
 }
 
 module.exports = JwtService

@@ -30,6 +30,7 @@ import LeadList from './features/Leads/LeadList.tsx';
 import HomePage from './features/UserSide/Homepage.tsx';
 // import Crscalculator from './features/UserSide/Home/CRS calculator/Crscalculator.tsx';
 import Crscalculator from './features/UserSide/Home/CRS calculator/crscalculator.tsx'
+import Login from './layout/Login.tsx';
 const stores = { authStore };
 const router = createBrowserRouter([
   {
@@ -82,11 +83,10 @@ const router = createBrowserRouter([
      
     ]
   },
-  //NO sidebar or navbar pages
-  // {
-  //   path: "/login",
-  //   element: <Login />,
-  // },
+  {
+    path: "/admin/login",
+    element: <Login />,
+  },
   {
     path: "/",
     element: <UserHome />,

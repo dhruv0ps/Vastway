@@ -10,8 +10,14 @@ const NocCodeController = require("../controllers/nocController")
 const LeadController = require("../controllers/leadController");
 const {fileUpload} = require("../config/multerConfig");
 const crsCalculator = require("../controllers/crsCalculator")
+const loginController = require("../controllers/loginController");
+const userController = require("../controllers/userController");
 var jsonParser = bodyParser.json()
 router.use(jsonParser)
+
+router.post("/loginUser", loginController.loginUser);
+router.get('/current', authenticateToken, userController.getCurrentUser);
+router.post('/logout', authenticateToken, userController.logoutUser);
 router.post("/categories", categoryController.addCategory);
 router.get("/categories", categoryController.getAllCategories);
 router.get("/categories/:id", categoryController.getCategoryById);

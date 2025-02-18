@@ -41,6 +41,7 @@ export default function CanadianDraws() {
     };
     fetchDraws();
   }, []);
+  
 
   useEffect(() => {
     const results = draws.filter(
@@ -116,7 +117,7 @@ export default function CanadianDraws() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-white py-12 px-4 sm:px-6 lg:px-8 border-b">
+      <div className=" py-12 px-4 sm:px-6 lg:px-8 ">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
@@ -129,8 +130,8 @@ export default function CanadianDraws() {
 
             </div>
 
-            <div className="bg-gray-50 p-8 rounded-lg">
-              <h2 className="text-2xl font-bold mb-4">
+            <div className=" p-8 ">
+              <h2 className="text-2xl font-bold mb-1">
                 Get the latest draw updates, immigration news, and insights – it's free!
               </h2>
               <form onSubmit={handleSubscribe} className="flex gap-2">

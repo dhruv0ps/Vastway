@@ -115,10 +115,10 @@ async function createDefaultAdminUser() {
 
     const existingUsers = await User.countDocuments();
     if (existingUsers === 0) {
-        let crypted_pass = await cryptService.cryptify("myPassword@556")
+        let crypted_pass = await cryptService.cryptify("Matter@white100*")
         await User.create({
             username: 'Admin',
-            email: 'ADMIN',
+            email: 'gitlab@theitcart.com',
             password: crypted_pass,
             role: adminRole?._id
         });

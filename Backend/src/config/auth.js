@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require("../config/models/userModel");
-
+const JwtService = require("../services/jwt-service");
+const jwtService = new JwtService();
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -8,15 +9,17 @@ const authenticateToken = async (req, res, next) => {
   if (token == null) return res.sendStatus(401);
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const decoded = await jwtService.verifyToken(token);
     // console.log("here2", decoded)
     // Fetch the user from the database and populate the role
-    const user = await User.findById(decoded.userId).populate({
-      path: 'role',
-      populate: {
-        path: 'permissions'
-      }
-    });
+    const decoded = await jwtService.verifyToken(token);
+    const user = await User.findById(decoded.userId)
+    // .populate({
+    //   path: 'role',
+    //   populate: {
+    //     path: 'permissions'
+    //   }
+    // });
     // console.log(user)
 
     if (!user) {
