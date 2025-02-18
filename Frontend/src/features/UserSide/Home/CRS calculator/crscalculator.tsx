@@ -182,7 +182,14 @@ const Crscalculator: React.FC = () => {
                     How old are you?
                   </label>
                   
-                  <AgeDropdown value={age} onChange={setAge}/> 
+                  <AgeDropdown 
+  value={age} 
+  onChange={(selectedAge) => {
+    setAge(selectedAge);
+   
+  }} 
+/>
+
                 </div>
 
 

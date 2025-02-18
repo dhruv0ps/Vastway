@@ -44,7 +44,10 @@ const CustomDropdown = <T,>({
     return (
         <div className={`relative ${className}`}>
             <button
-                onClick={() => setIsOpen(!isOpen)}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(!isOpen);
+              }}
                 className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
                 {getDisplayValue(value)}
@@ -79,7 +82,9 @@ const CustomDropdown = <T,>({
                             <li
                                 key={index}
                                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
                                     onChange(option);
                                     setIsOpen(false);
                                     setSearchTerm("")
