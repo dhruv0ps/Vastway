@@ -1,10 +1,10 @@
 //#region // exam proficincy
 const ieltsToCLB = (score, type) => {     
     const mapping = {         
-        listening: { "9.0": 10, "8.5": 10, "8.0": 9, "7.5": 8, "7.0": 7, "6.0": 6, "5.0": 5, "4.5": 4 },         
-        reading: { "9.0": 10, "8.5": 10, "8.0": 10, "7.0": 9, "6.5": 8, "6.0": 7, "5.5": 6, "5.0": 6, "4.0": 5, "3.5": 4 },         
-        writing: { "9.0": 10, "8.5": 10, "8.0": 10, "7.5": 10, "7.0": 9, "6.5": 8, "6.0": 7, "5.5": 6, "5.0": 5, "4.5": 4 },         
-        speaking: { "9.0": 10, "8.5": 10, "8.0": 10, "7.5": 10, "7.0": 9, "6.5": 8, "6.0": 7, "5.5": 6, "5.0": 5, "4.5": 4 }     
+        listening: { "8.5 - 9": 10, "8": 9, "7.5": 8, "6 - 7": 7, "5.5": 6, "5": 5, "4.5": 4 },         
+        reading: { "8 - 9": 10, "7 - 7.5": 9, "6.5": 8, "6": 7, "5 - 5.5": 6, "4 - 4.5": 5, "3.5": 4 },         
+        writing: { "7.5 - 9": 10, "7": 9, "6.5": 8, "6": 7, "5.5": 6, "5": 5, "4 - 4.5": 4 },         
+        speaking: { "7.5 - 9": 10, "7": 9, "6.5": 8, "6": 7, "5.5": 6, "5": 5, "4 - 4.5": 4 }     
     };
 
     const scoreStr = score.toString();
@@ -19,7 +19,13 @@ const ieltsToCLB = (score, type) => {
     return mapping[type][nearestScore.toFixed(1)] || 0; 
 }
 
-  const celpipToCLB = (score) => Math.min(Math.max(score, 3), 10);
+const celpipToCLB = (score) => {
+    if (typeof score === "string" && score.includes("-")) {
+        const [low, high] = score.split("-").map(Number);
+        return Math.max(3, Math.min(10, high));
+    }
+    return Math.max(3, Math.min(10, Number(score)));
+};
   
  
   const pteToCLB = (score, type) => {
@@ -221,7 +227,7 @@ const convertSpouseLanguageToCLB = (spouselanguageTest, spouseLanguageScores) =>
         clbScores = Object.fromEntries(
             Object.keys(spouseLanguageScores).map(k => [k, ieltsToCLB(spouseLanguageScores[k], k)])
         );
-    } else if (spouselanguageTest === "CELPIP") {
+    } else if (spouselanguageTest === "Celpip-g") {
         clbScores = Object.fromEntries(
             Object.keys(spouseLanguageScores).map(k => [k, celpipToCLB(spouseLanguageScores[k])])
         );
@@ -232,6 +238,11 @@ const convertSpouseLanguageToCLB = (spouselanguageTest, spouseLanguageScores) =>
     } else if (spouselanguageTest === "TEF_Canada") {
         clbScores = Object.fromEntries(
             Object.keys(spouseLanguageScores).map(k => [k, tefToCLB(spouseLanguageScores[k], k)])
+        );
+    }
+    else if (spouselanguageTest === "PTE_CORE") {
+        clbScores = Object.fromEntries(
+            Object.keys(spouseLanguageScores).map(k => [k, pteToCLB(spouseLanguageScores[k],k)])
         );
     }
 

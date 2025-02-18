@@ -22,7 +22,10 @@ const LanguageComponent: React.FC<LanguageComponentProps> = ({
 }) => {
   const scoreOptions: Record<string, Record<string, string[]>> = {
     IELTS: {
-      all: ["9.0", "8.5", "8.0", "7.5", "7.0", "6.5", "6.0", "5.5", "5.0", "0 - 4.5"],
+      reading: ["8 - 9", "7 - 7.5", "6.5", "6", "5 - 5.5", "4 - 4.5", "3.5"],
+      writing: ["7.5 - 9", "7", "6.5", "6", "5.5", "5", "4 - 4.5"],
+      listening: ["8.5 - 9", "8", "7.5", "6 - 7", "5.5", "5", "4.5"],
+      speaking: ["7.5 - 9", "7", "6.5", "6", "5.5", "5", "4 - 4.5"],
     },
     PTE_CORE: {
       listening: ["89 - 90", "82 - 88", "71 - 81", "60 - 70", "50 - 59", "39 - 49", "28 - 38", "0 - 27"],
@@ -122,7 +125,7 @@ const LanguageComponent: React.FC<LanguageComponentProps> = ({
               if (languageTest === "PTE_CORE") {
                 scoreList = scoreOptions[languageTest]?.[skill] || [];
               }
-              else    if (languageTest === "TEF_Canada") {
+              else    if (languageTest === "TEF_Canada" || languageTest === "IELTS") {
                 scoreList = scoreOptions[languageTest]?.[skill] || [];
               }
              
