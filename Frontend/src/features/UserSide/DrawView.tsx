@@ -201,7 +201,7 @@ export default function CanadianDraws() {
       </div>
 
       {/* Existing Content */}
-      <div className="py-12 px-4 sm:px-6 lg:px-8">
+      <div className="py-1 px-4 sm:px-6 lg:px-8 mb-2">
 
         <main className="max-w-6xl mx-auto">
           <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">

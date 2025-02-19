@@ -1,12 +1,14 @@
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
+import {  HiLogout, HiViewGrid } from "react-icons/hi";
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 import { observer } from "mobx-react-lite";
-
+import { useStore } from "../store/useStore";
 import logo from "../assets/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default observer(function NavBar({ toggleSidebar, isSidebarOpen }: any) {
-  
+  const { authStore } = useStore();
+  const navigate = useNavigate()
   return (
     <Navbar className="bg-gray-50 drop-shadow-sm" fluid rounded>
       <Navbar.Brand href="/">
@@ -26,11 +28,12 @@ export default observer(function NavBar({ toggleSidebar, isSidebarOpen }: any) {
             <span className="block truncate text-sm">email</span>
           </Dropdown.Header>
           <Dropdown.Item href="/" icon={HiViewGrid}>Dashboard</Dropdown.Item>
-          <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
-          <Dropdown.Item icon={HiCurrencyDollar}>Earnings</Dropdown.Item>
+          {/* <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+          <Dropdown.Item icon={HiCurrencyDollar}>Earnings</Dropdown.Item> */}
           <Dropdown.Divider />
           <Dropdown.Item icon={HiLogout} onClick={async () => {
-
+          await authStore.logout()
+             navigate("/admin/login");
           }}>Sign out</Dropdown.Item>
         </Dropdown>
         {isSidebarOpen ? <MdMenuOpen className="text-2xl mx-2 lg:hidden" onClick={() => toggleSidebar()} /> : <MdMenu className="text-2xl mx-2 lg:hidden" onClick={() => toggleSidebar()} />}
