@@ -104,7 +104,7 @@ const LanguageComponent: React.FC<LanguageComponentProps> = ({
       <select
         value={languageTest}
         onChange={(e) => setLanguageTest(e.target.value)}
-        className="w-full border rounded px-3 py-2"
+        className="w-40 border rounded px-3 py-2"
       >
         <option value="">Select...</option>
         {getAvailableTests().map((test) => (

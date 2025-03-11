@@ -1,13 +1,13 @@
 import React from 'react';
 import { CRSScores } from "../../../../config/models/crs";
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import {  CheckCircle2 } from 'lucide-react';
 
 interface ScoreProps {
   data: CRSScores;
   onReset: () => void;
 }
 
-const Score: React.FC<ScoreProps> = ({ data, onReset }) => {
+const Score: React.FC<ScoreProps> = ({ data }) => {
   const coreFactors = [
     { label: 'Age', score: data.ageScore },
     { label: 'Education', score: data.educationScore },
@@ -67,16 +67,18 @@ const Score: React.FC<ScoreProps> = ({ data, onReset }) => {
   );
 
   return (
-    <div className="max-w-4xl mx-auto bg-gray-50 p-6 min-h-screen">
+    <div className="max-w-5xl mx-auto bg-gray-50 p-6 min-h-screen">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-8 ">
+      {/* <div className="mt-8 mb-2 flex justify-end">
         <button
-          className="mb-6 inline-flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
+          className="inline-flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
           onClick={onReset}
         >
           <ArrowLeft size={18} />
           Calculate again
         </button>
+      </div> */}
         
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
           <div className="flex items-center gap-3 mb-4">
