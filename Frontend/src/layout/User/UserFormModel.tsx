@@ -72,9 +72,9 @@ const UserFormModal = () => {
         <h2 className="text-2xl font-bold text-primary dark:text-white">
           Welcome to Vastway Immigration Inc.
         </h2>
-        <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mt-1">
+        {/* <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mt-1">
           Please enter your details
-        </h3>
+        </h3> */}
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit} className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
