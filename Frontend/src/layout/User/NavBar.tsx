@@ -88,32 +88,41 @@ const Navbar: React.FC = () => {
 
 const NavLinks: React.FC = () => (
   <>
-    <Link to="/view/list" className="text-primary hover:underline">
-      Draws
-    </Link>
-    <Link to="/blogs" className="text-primary hover:underline">
-      Blogs
-    </Link>
-    <Link to="/stories" className="text-primary hover:underline">
-      Stories
-    </Link>
-    <a
-      href="https://mail.thecanindian.com/archive"
+  <a
+      href="https://vastwayimmigration.com"
       target="_blank"
       className="text-primary hover:underline"
       rel="noopener noreferrer"
     >
-      Newsletter
+      Home
+    </a>
+    <Link to="/view/list" className="text-primary hover:underline">
+      Draws
+    </Link>
+
+    <a
+      href="https://vastwayimmigration.com/blogs"
+      target="_blank"
+      className="text-primary hover:underline"
+      rel="noopener noreferrer"
+    >
+      Blogs
+    </a>
+    <Link to="/stories" className="text-primary hover:underline">
+      Stories
+    </Link>
+    <a
+      href="https://vastwayimmigration.com/news-update/"
+      target="_blank"
+      className="text-primary hover:underline"
+      rel="noopener noreferrer"
+    >
+      News Updates
     </a>
     <Link to="/draw-tracker" className="text-primary hover:underline">
       Draw Tracker
     </Link>
-    <Link to="/pr-program-tracker" className="text-primary hover:underline">
-      Ways to PR
-    </Link>
-    <Link to="/subscribe-form" className="text-primary hover:underline">
-      Subscribe
-    </Link>
+    
   </>
 )
 

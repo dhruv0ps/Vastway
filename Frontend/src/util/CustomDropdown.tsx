@@ -48,7 +48,7 @@ const CustomDropdown = <T,>({
                 e.preventDefault();
                 setIsOpen(!isOpen);
               }}
-                className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             >
                 {getDisplayValue(value)}
                 <span className="absolute right-4 top-1/2 -translate-y-1/2">

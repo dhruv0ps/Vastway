@@ -14,18 +14,18 @@ export default function CanadianDraws() {
   const [borderColors, setBorderColors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
 
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
 
   const handleReset = () => {
 
   }
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle subscription logic here
-    console.log("Subscribing email:", email);
-    setEmail("");
-  };
+  // const handleSubscribe = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Handle subscription logic here
+  //   console.log("Subscribing email:", email);
+  //   setEmail("");
+  // };
 
   useEffect(() => {
     const fetchDraws = async () => {
@@ -120,7 +120,7 @@ export default function CanadianDraws() {
       <div className=" py-12 px-4 sm:px-6 lg:px-8 ">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
+            {/* <div>
               <h1 className="text-xl font-bold mb-4">Draws</h1>
               <p className="text-xl mb-8">
                 Find <span className="font-bold">latest Immigration Draws and News</span>,
@@ -128,9 +128,9 @@ export default function CanadianDraws() {
               </p>
 
 
-            </div>
+            </div> */}
 
-            <div className=" p-8 ">
+            {/* <div className=" p-8 ">
               <h2 className="text-2xl font-bold mb-1">
                 Get the latest draw updates, immigration news, and insights – it's free!
               </h2>
@@ -147,9 +147,9 @@ export default function CanadianDraws() {
                   Subscribe
                 </Button>
               </form>
-            </div>
+            </div> */}
           </div>
-          <div className="flex flex-wrap gap-4 mb-8 justify-center items-center mt-4">
+          {/* <div className="flex flex-wrap gap-4 mb-8 justify-center items-center mt-4">
             <Button
               className="bg-white text-primary border border-black rounded-md "
               size="md"
@@ -166,7 +166,7 @@ export default function CanadianDraws() {
             <Button className="bg-white text-primary border border-black rounded-md" size="md" >
               Ways To PR
             </Button>
-          </div>
+          </div> */}
 
           <div className="flex flex-col sm:flex-row gap-4">
             <select
